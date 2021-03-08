@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Message;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -13,10 +14,13 @@ class EmailTest extends TestCase
      *
      * @return void
      */
-    public function test_sendEmail()
+    public function testListMessages()
     {
-        $response = $this->get('/');
+        $messages = Message::factory()->count(5)->create();
 
-        $response->assertStatus(200);
+        $response = $this->get(route('message.index'));
+
+        $response->assertStatus(200)
+        ->assertJson($messages->toArray());
     }
 }
