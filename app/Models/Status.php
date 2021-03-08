@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Message extends Model
+class Status extends Model
 {
-
     use HasFactory;
 
-    public function email()
+    public function emails()
     {
-        return $this->belongsTo(Email::class);
+        return $this->belongsToMany(Email::class)->withPivot('status_message');
     }
 }
