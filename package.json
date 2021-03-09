@@ -12,6 +12,7 @@
     "dependencies": {
         "dayjs": "^1.10.4",
         "lodash-es": "^4.17.20",
+        "nprogress": "^0.2.0",
         "vue-router": "^3.4.9",
         "vuex": "^3.6.2"
     },
