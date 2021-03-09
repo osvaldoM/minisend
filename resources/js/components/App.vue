@@ -2,7 +2,7 @@
     <div>
         <app-header></app-header>
 
-        <main class="py-header">
+        <main class="py-header main-content container mx-auto">
             <router-view>
 
             </router-view>

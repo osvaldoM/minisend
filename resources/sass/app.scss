@@ -35,3 +35,18 @@ html, body {
 .nav__link.router-link-exact-active {
     @apply text-black;
 }
+
+.emails-table-column {
+    @apply text-black;
+    padding-top:20px;
+    padding-bottom:20px;
+    padding-right:20px;
+    &:first-child {
+        padding-left:20px;
+        //padding-right:0;
+    }
+}
+
+.main-content {
+
+}
