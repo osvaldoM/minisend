@@ -5,9 +5,9 @@
  */
 
 require('./bootstrap');
+require('./register-filters');
 
 import App from "./components/App";
-
 
 import Vue from 'vue'
 

@@ -37,16 +37,29 @@ html, body {
 }
 
 .emails-table-column {
-    @apply text-black;
-    padding-top:20px;
-    padding-bottom:20px;
-    padding-right:20px;
+    @apply py-4 pr-4;
     &:first-child {
-        padding-left:20px;
+        @apply pl-4;
         //padding-right:0;
     }
 }
 
 .main-content {
 
+}
+
+.email-status {
+    @apply rounded-lg bg-gray-200 mr-2 px-4 py-1 inline-block;
+    min-width: 5rem;
+}
+.default-status {
+    @apply bg-gray-100 text-gray-700;
+}
+
+.success-status {
+    @apply bg-green-100 text-green-700;
+}
+
+.failed-status {
+    @apply bg-red-100 text-red-700;
 }
