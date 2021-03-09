@@ -1,5 +1,5 @@
 <template>
-    <footer class="mt-20 absolute bottom-4 left-0 w-full px-24">
+    <footer class="mt-40 absolute bottom-4 left-0 w-full px-24">
         <ul class="home-links flex">
             <li class="mr-2"><a href="https://github.com/osvaldoM" target="_blank" rel="noopener">GitHub</a></li>
             <li class="mr-2"><a href="https://twitter.com/impurefunction" target="_blank" rel="noopener">Twitter</a></li>

@@ -3,6 +3,28 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    h1 {
+        @apply text-2xl font-bold mb-8;
+    }
+
+    h2 {
+        @apply text-xl font-bold mb-6;
+    }
+
+    .h3 {
+        @apply text-lg font-bold mb-6;
+    }
+
+    p {
+        @apply mb-7
+    }
+    input {
+        &:focus {
+            outline: none;
+        }
+    }
+}
 
 // Fonts
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');

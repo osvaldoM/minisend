@@ -1,5 +1,15 @@
 <template>
     <div>
+        <h1> Activity</h1>
+
+        <form class="search bg-white shadow-lg p-4 flex items-center justify-between mb-10 w-1/2">
+            <input class="search-input text-black w-full mr-2" type="search" placeholder="Search by sender, recipient or subject" />
+            <button type="submit">
+                <svg-icon icon="search" class="bg-blue-700 text-white py-4 px-8 rounded"></svg-icon>
+            </button>
+        </form>
+
+
         <table class="emails auto w-full">
             <thead class="mb-2">
             <tr class="">
