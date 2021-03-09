@@ -19,6 +19,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <link rel="icon" type="image/png" href="{{ asset('favicon-32x32.png') }}">
 </head>
 <body>
     <div id="app">

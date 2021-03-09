@@ -2,13 +2,14 @@
     <div>
         <h1> Activity</h1>
 
-        <form class="search bg-white shadow-lg p-4 flex items-center justify-between mb-10 w-1/2">
+        <form class="search bg-white shadow-md p-4 flex items-center justify-between mb-10 w-1/2">
             <input class="search-input text-black w-full mr-2" type="search" placeholder="Search by sender, recipient or subject" />
             <button type="submit">
                 <svg-icon icon="search" class="bg-blue-700 text-white py-4 px-8 rounded"></svg-icon>
             </button>
         </form>
 
+        <p> List contains <strong class="font-bold">{{emails? emails.length : 0}}</strong> items</p>
 
         <table class="emails auto w-full">
             <thead class="mb-2">
@@ -39,6 +40,14 @@
                 </td>
             </tr>
         </table>
+            <div class="paginator mt-10">
+                <span> {{paginatedEmails.from}} - {{paginatedEmails.to}} of {{paginatedEmails.total}}</span>
+            <ul v-if="paginatedEmails && paginatedEmails.data" class="page-links flex ml-4">
+                <li class="page-link-container" v-for="link in paginatedEmails.links">
+                    <button v-bind:disabled="!link.url || link.active" v-on:click="changePage" v-bind:class="`page-link ${link.active ? 'bg-blue-100' : ''}`" :data-url="link.url" v-html="link.label"></button>
+                </li>
+            </ul>
+            </div>
     </div>
 </template>
 
@@ -64,12 +73,13 @@ const statusColor = (status) =>{
 const mostRecentStatus = (statuses) => {
     return _last(statuses);
 };
+
 const mostRecentStatusClassName = (statuses) => {
     return statusColor(mostRecentStatus(statuses));
 };
     export default {
         components: {
-            SvgIcon
+            SvgIcon,
         },
         created(){
             this.loadEmails();
@@ -78,18 +88,30 @@ const mostRecentStatusClassName = (statuses) => {
         },
         data() {
             return {
-                emails: []
+               paginatedEmails: {}
             }
         },
         methods: {
-            async loadEmails(){
-                const resp = await axios.get(window.route('email.index'));
-                this.emails = resp.data;
+            async loadEmails(url){
+                const resp = await axios.get(url || window.route('email.index'));
+                this.paginatedEmails= resp.data;
+            },
+            async changePage(event) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                const url = event.target.getAttribute('data-url');
+                if(!url) {
+                    return;
+                }
+                this.loadEmails(url)
             },
             mostRecentStatus,
             mostRecentStatusClassName
         },
         computed: {
+            emails() {
+                return this.paginatedEmails.data;
+            },
         }
     }
 </script>

@@ -85,3 +85,24 @@ html, body {
 .failed-status {
     @apply bg-red-100 text-red-700;
 }
+
+.paginator {
+    @apply flex justify-end items-center ml-4;
+}
+.page-link-container {
+    &:first-child .page-link {
+        @apply rounded-l-lg;
+    }
+    &:last-child .page-link {
+        @apply rounded-r-lg;
+    }
+}
+.page-link {
+    @apply border py-4 px-6;
+    &:hover:enabled {
+        @apply bg-gray-200;
+    }
+    &:disabled {
+        cursor: not-allowed;
+    }
+}
