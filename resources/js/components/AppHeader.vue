@@ -3,9 +3,11 @@
         <nav class="nav">
             <ul class="flex">
                 <li class="nav__item">
+                    <svg-icon icon="home" class="mr-2"></svg-icon>
                     <router-link class="nav__link" exact to="/home" >Dashboard</router-link>
                 </li>
                 <li class="nav__item">
+                    <svg-icon icon="information-circle" class="mr-2"></svg-icon>
                     <router-link class="nav__link" to="/help/">Help</router-link>
                 </li>
             </ul>
