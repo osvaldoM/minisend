@@ -2,7 +2,7 @@
     <div>
         <h1> Activity</h1>
 
-        <form class="search bg-white shadow-md p-4 flex items-center justify-between mb-10 w-1/2">
+        <form v-on:submit="filterEmails" class="search bg-white shadow-md p-4 flex items-center justify-between mb-10 w-1/2">
             <input class="search-input text-black w-full mr-2" type="search" placeholder="Search by sender, recipient or subject"/>
             <button type="submit">
                 <svg-icon icon="search" class="bg-blue-700 text-white py-4 px-8 rounded"></svg-icon>
@@ -40,14 +40,28 @@
                 </td>
             </tr>
         </table>
-        <div class="paginator mt-10">
-            <span> {{ paginatedEmails.from }} - {{ paginatedEmails.to }} of {{ paginatedEmails.total }}</span>
-            <ul v-if="paginatedEmails && paginatedEmails.data" class="page-links flex ml-4">
-                <li class="page-link-container" v-for="link in paginatedEmails.links">
-                    <button v-bind:disabled="!link.url || link.active" v-on:click="changePage"
-                            v-bind:class="`page-link ${link.active ? 'bg-blue-100' : ''}`" :data-url="link.url" v-html="link.label"></button>
-                </li>
-            </ul>
+        <div class="paginator flex justify-between items-center mt-10">
+            <div>
+                <label>
+                    View
+                    <select name="per_page" class="px-4 py-2" v-model="paginatedEmails.per_page">
+                        <option disabled value="">Please select one</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                    </select>
+                </label>
+            </div>
+            <div class="flex justify-end items-center ml-4">
+                <span> {{ paginatedEmails.from }} - {{ paginatedEmails.to }} of {{ paginatedEmails.total }}</span>
+                <ul v-if="paginatedEmails && paginatedEmails.data" class="page-links flex ml-4">
+                    <li class="page-link-container" v-for="link in paginatedEmails.links">
+                        <button v-bind:disabled="!link.url || link.active" v-on:click="changePage"
+                                v-bind:class="`page-link ${link.active ? 'bg-blue-100' : ''}`" :data-url="link.url" v-html="link.label"></button>
+                    </li>
+                </ul>
+
+            </div>
         </div>
     </div>
 </template>
@@ -97,17 +111,24 @@ export default {
     },
     methods: {
         async loadEmails(url){
-            const resp = await axios.get(url || window.route('email.index'));
+            const resp = await axios.get(url || window.route('email.index',{
+                'per_page': this.paginatedEmails ? this.paginatedEmails.per_page: ''
+            }));
             this.paginatedEmails = resp.data;
         },
         async changePage(event){
-            event.preventDefault();
-            event.stopImmediatePropagation();
             const url = event.target.getAttribute('data-url');
             if(!url){
                 return;
             }
-            this.loadEmails(url)
+            const urlObj = new URL(url);
+            urlObj.searchParams.set('per_page', this.paginatedEmails.per_page);
+            this.loadEmails(urlObj)
+        },
+        async filterEmails(event){
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            const formData = new FormData(event.target);
         },
         mostRecentStatus,
         mostRecentStatusClassName
@@ -116,6 +137,14 @@ export default {
         emails(){
             return this.paginatedEmails.data;
         },
+        perPage() {
+            return this.paginatedEmails.per_page;
+        }
+    },
+    watch: {
+        perPage(per_page){
+            this.loadEmails();
+        }
     }
 }
 </script>

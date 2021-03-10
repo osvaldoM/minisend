@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Failed'
         ])->create();
 
-        Email::factory()->count(10)->hasAttached($postedStatus)->create()->each(function ($email) use (&$sentStatus, &$failedStatus) {
+        Email::factory()->count(30)->hasAttached($postedStatus)->create()->each(function ($email) use (&$sentStatus, &$failedStatus) {
             $email->message()->save(Message::factory()->make());
             $email->statuses()->attach(
                 Arr::random([$sentStatus, $failedStatus]),
