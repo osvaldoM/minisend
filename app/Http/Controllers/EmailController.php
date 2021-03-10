@@ -14,7 +14,7 @@ class EmailController extends Controller
      */
     public function index()
     {
-        return response()->json(Email::with(['message', 'statuses'])->paginate(5));
+        return response()->json(Email::with(['message', 'statuses'])->paginate());
 
     }
 
