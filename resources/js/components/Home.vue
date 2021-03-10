@@ -3,7 +3,7 @@
         <h1> Activity</h1>
 
         <form v-on:submit="filterEmails" class="search bg-white shadow-md p-4 flex items-center justify-between mb-10 w-1/2">
-            <input class="search-input text-black w-full mr-2" type="search" placeholder="Search by sender, recipient or subject"/>
+            <input class="search-input text-black w-full mr-2" v-model="search" type="search" placeholder="Search by sender, recipient or subject"/>
             <button type="submit">
                 <svg-icon icon="search" class="bg-blue-700 text-white py-4 px-8 rounded"></svg-icon>
             </button>
@@ -15,6 +15,7 @@
             <thead class="mb-2">
             <tr class="">
                 <td class="font-bold uppercase text-xs emails-table-column">Status</td>
+                <td class="font-bold uppercase text-xs emails-table-column">Sender</td>
                 <td class="font-bold uppercase text-xs emails-table-column">Recipient</td>
                 <td class="font-bold uppercase text-xs emails-table-column">Subject</td>
                 <td class="font-bold uppercase text-xs emails-table-column">Date created</td>
@@ -27,8 +28,9 @@
                         {{ mostRecentStatus(email.statuses).name }}
                     </span>
                 </td>
+                <td class="emails-table-column text-black">{{ email.message.from }}</td>
                 <td class="emails-table-column text-black">{{ email.message.to }}</td>
-                <td class="emails-table-column text-black">{{ email.message.subject }}</td>
+                <td class="emails-table-column text-black">{{ email.message.subject | truncate(100, '...') }}</td>
                 <td class="emails-table-column">{{ email.created_at | formatDate }}</td>
                 <td class="emails-table-column">
                     <router-link to="/" title="Details">
@@ -106,13 +108,15 @@ export default {
     },
     data(){
         return {
-            paginatedEmails: {}
+            paginatedEmails: {},
+            search: ''
         }
     },
     methods: {
         async loadEmails(url){
             const resp = await axios.get(url || window.route('email.index',{
-                'per_page': this.paginatedEmails ? this.paginatedEmails.per_page: ''
+                'per_page': this.paginatedEmails ? this.paginatedEmails.per_page: '',
+                'query': this.search
             }));
             this.paginatedEmails = resp.data;
         },
@@ -128,7 +132,7 @@ export default {
         async filterEmails(event){
             event.preventDefault();
             event.stopImmediatePropagation();
-            const formData = new FormData(event.target);
+            this.loadEmails();
         },
         mostRecentStatus,
         mostRecentStatusClassName
