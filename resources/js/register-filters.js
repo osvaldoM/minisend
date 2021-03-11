@@ -8,10 +8,10 @@ Vue.filter('formatDate', function (date){
 });
 
 
-Vue.filter('truncate', function(text, length, clamp){
-    clamp = clamp || '...';
-    const node = document.createElement('div');
-    node.innerHTML = text;
-    const content = node.textContent;
-    return content.length > length ? content.slice(0, length) + clamp : content;
+Vue.filter('truncate', function(text, length, suffix='...'){
+    if (text.length > length) {
+        return text.substring(0, length) + suffix;
+    } else {
+        return text;
+    }
 });

@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import AppFooter from "./AppFooter";
-import AppHeader from "./AppHeader";
+import AppFooter from "./TheFooter";
+import AppHeader from "./TheHeader";
 export default {
     components: {
         AppFooter,

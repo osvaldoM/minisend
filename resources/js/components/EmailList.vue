@@ -1,16 +1,5 @@
 <template>
     <div>
-        <h1> Activity</h1>
-
-        <form v-on:submit="filterEmails" class="search bg-white shadow-md p-4 flex items-center justify-between mb-10 w-1/2">
-            <input class="search-input text-black w-full mr-2" v-model="search" type="search" placeholder="Search by sender, recipient or subject"/>
-            <button type="submit">
-                <svg-icon icon="search" class="bg-blue-700 text-white py-4 px-8 rounded"></svg-icon>
-            </button>
-        </form>
-
-        <p> List contains <strong class="font-bold">{{ emails ? emails.length : 0 }}</strong> items</p>
-
         <table class="emails auto w-full">
             <thead class="mb-2">
             <tr class="">
@@ -29,8 +18,10 @@
                     </span>
                 </td>
                 <td class="emails-table-column text-black">{{ email.message.from }}</td>
-                <td class="emails-table-column text-black">{{ email.message.to }}</td>
-                <td class="emails-table-column text-black">{{ email.message.subject | truncate(100, '...') }}</td>
+                <td class="emails-table-column text-black">
+                    <router-link class="underline" to="">{{ email.message.to }}</router-link>
+                </td>
+                <td class="emails-table-column text-black">{{ email.message.subject | truncate(40) }}</td>
                 <td class="emails-table-column">{{ email.created_at | formatDate }}</td>
                 <td class="emails-table-column">
                     <router-link to="/" title="Details">
@@ -66,14 +57,13 @@
             </div>
         </div>
     </div>
+
 </template>
 
 <script>
-
-import {last as _last} from 'lodash-es'
+import {last as _last} from "lodash-es";
+import store from "../store";
 import SvgIcon from "./base_components/SvgIcon";
-
-import axios from "../HTTP";
 
 const statusColor = (status) => {
     switch (status.name) {
@@ -98,57 +88,62 @@ const mostRecentStatusClassName = (statuses) => {
     return statusColor(mostRecentStatus(statuses));
 };
 export default {
+    props: {
+        // paginatedEmails: {
+        //     type: Object,
+        //     default: null,
+        //     required: true
+        // }
+    },
     components: {
         SvgIcon,
     },
     created(){
-        this.loadEmails();
-    },
-    mounted(){
+        store.loadEmails();
     },
     data(){
         return {
-            paginatedEmails: {},
-            search: ''
+            privateState: {
+
+            },
+            sharedState: store.state
         }
     },
     methods: {
-        async loadEmails(url){
-            const resp = await axios.get(url || window.route('email.index',{
-                'per_page': this.paginatedEmails ? this.paginatedEmails.per_page: '',
-                'query': this.search
-            }));
-            this.paginatedEmails = resp.data;
-        },
         async changePage(event){
             const url = event.target.getAttribute('data-url');
             if(!url){
                 return;
             }
-            const urlObj = new URL(url);
-            urlObj.searchParams.set('per_page', this.paginatedEmails.per_page);
-            this.loadEmails(urlObj)
-        },
-        async filterEmails(event){
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            this.loadEmails();
+            store.loadEmails(url)
         },
         mostRecentStatus,
         mostRecentStatusClassName
     },
     computed: {
         emails(){
-            return this.paginatedEmails.data;
+            return this.sharedState.paginatedEmails.data;
         },
-        perPage() {
-            return this.paginatedEmails.per_page;
+        perPage: {
+            get() {
+                return this.sharedState.paginatedEmails.per_page;
+            },
+            set() {
+                store.setperPage();
+            }
+        },
+        paginatedEmails() {
+            return this.sharedState.paginatedEmails;
         }
     },
     watch: {
         perPage(per_page){
-            this.loadEmails();
-        }
+            store.loadEmails();
+        },
     }
 }
 </script>
+
+<style scoped>
+
+</style>
