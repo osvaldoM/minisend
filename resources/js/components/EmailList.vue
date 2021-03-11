@@ -19,7 +19,7 @@
                 </td>
                 <td class="emails-table-column text-black">{{ email.message.from }}</td>
                 <td class="emails-table-column text-black">
-                    <router-link class="underline" to="">{{ email.message.to }}</router-link>
+                    <router-link class="underline" :to="{ name: 'emailsTo', params: { recipient: email.message.to }}">{{ email.message.to }}</router-link>
                 </td>
                 <td class="emails-table-column text-black">{{ email.message.subject | truncate(40) }}</td>
                 <td class="emails-table-column">{{ email.created_at | formatDate }}</td>

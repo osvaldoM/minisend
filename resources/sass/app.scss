@@ -107,3 +107,14 @@ html, body {
         cursor: not-allowed;
     }
 }
+
+.gravatar {
+    background-image: url("https://i2.wp.com/app.mailersend.com/images/user/avatar.png?ssl=1");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 85% 85%;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,.08);
+}

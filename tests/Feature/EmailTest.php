@@ -58,7 +58,7 @@ class EmailTest extends TestCase
         $response = $this->get(route('email.index', ['query' => $email_with_random_sender['message']['from']]));
 
         $testEmail = Arr::first($response['data'], function ($value, $key) use ($email_with_random_sender) {
-            return $value['id'] >= $email_with_random_sender['id'];
+            return $value['id'] == $email_with_random_sender['id'];
         });
 
         $response->assertStatus(200);
@@ -73,7 +73,7 @@ class EmailTest extends TestCase
         $response = $this->get(route('email.index', ['query' => $email_with_random_recipient['message']['to']]));
 
         $testEmail = Arr::first($response['data'], function ($value, $key) use ($email_with_random_recipient) {
-            return $value['id'] >= $email_with_random_recipient['id'];
+            return $value['id'] == $email_with_random_recipient['id'];
         });
 
         $response->assertStatus(200);
@@ -88,11 +88,28 @@ class EmailTest extends TestCase
         $response = $this->get(route('email.index', ['query' => $email_with_random_subject['message']['subject']]));
 
         $testEmail = Arr::first($response['data'], function ($value, $key) use ($email_with_random_subject) {
-            return $value['id'] >= $email_with_random_subject['id'];
+            return $value['id'] == $email_with_random_subject['id'];
         });
 
         $response->assertStatus(200);
         $this->assertNotEmpty($testEmail);
         $this->assertEqualsCanonicalizing($testEmail, $email_with_random_subject);
+    }
+
+    public function testListEmailsToRecipient()
+    {
+        $email_with_random_recipient = Arr::random($this->emails->toArray());
+
+        $response = $this->get(route('emailsToRecipient', ['recipient' => $email_with_random_recipient['message']['to']]));
+
+        $testEmail = Arr::first($response->getData(true), function ($value, $key) use ($email_with_random_recipient) {
+            return $value['id'] == $email_with_random_recipient['id'];
+        });
+
+        $response->assertStatus(200);
+
+        $this->assertNotEmpty($testEmail);
+        $this->assertEqualsCanonicalizing($testEmail, $email_with_random_recipient);
+
     }
 }

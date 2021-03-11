@@ -2,6 +2,7 @@ import VueRouter from 'vue-router'
 import Home from './components/TheHome'
 import Vue from "vue";
 import nprogress from 'nprogress'
+import EmailListItem from "./components/EmailListItem";
 
 Vue.use(VueRouter)
 
@@ -18,8 +19,14 @@ const router = new VueRouter({
         {
             path: '/home',
             name: 'home',
-            alias: '/emails',
+            alias: '/',
             component: Home
+        },
+        {
+            path: '/emails/to/:recipient',
+            name: 'emailsTo',
+            component: EmailListItem,
+            props: true
         },
     ],
 });

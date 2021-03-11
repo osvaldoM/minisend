@@ -49,15 +49,18 @@ class EmailController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Display emails from recipient
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Email  $email
+     * @param String $recipient
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Email $email)
+    public function get_recipient_emails(String $recipient)
     {
-        //
+        $emails_to_recipient =  Email::whereHas('message', function ($query) use ($recipient) {
+           return $query->where('to', '=', $recipient);
+        })->with(['message', 'statuses'])->get();
+
+        return  response()->json($emails_to_recipient);
     }
 
     /**
