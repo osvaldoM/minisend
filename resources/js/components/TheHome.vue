@@ -16,7 +16,7 @@ import SvgIcon from "./base_components/SvgIcon";
 
 import EmailsList from "./EmailList";
 import SearchForm from "./SearchForm";
-import store from "../store";
+import {globalStore} from "../store";
 
 export default {
     components: {
@@ -33,7 +33,7 @@ export default {
             privateState: {
 
             },
-            sharedState: store.state
+            sharedState: globalStore.state
         }
     },
     methods: {

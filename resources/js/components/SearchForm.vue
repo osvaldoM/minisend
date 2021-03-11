@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import store from "../store";
+import {globalStore} from "../store";
 import SvgIcon from "./base_components/SvgIcon";
 
 export default {
@@ -20,14 +20,14 @@ export default {
             privateState: {
 
             },
-            sharedState: store.state
+            sharedState: globalStore.state
         }
     },
     methods: {
         async filterEmails(event){
             event.preventDefault();
             event.stopImmediatePropagation();
-            store.loadEmails();
+            globalStore.loadEmails();
         }
     },
     computed: {
@@ -36,7 +36,7 @@ export default {
                 return this.sharedState.search;
             },
             set(search){
-                store.setSearchAction(search);
+                globalStore.setSearchAction(search);
             }
         }
     }

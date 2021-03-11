@@ -30,4 +30,24 @@ const store = {
     }
 }
 
-export default store;
+class Store {
+    constructor(){
+        Object.assign(this, store);
+    }
+}
+
+const  createStore = () => new Store();
+
+export {
+    store as globalStore,
+    createStore
+};
+
+
+
+//    state(){
+//         return{
+//             paginatedEmails: {},
+//             search: ''
+//         };
+//     },

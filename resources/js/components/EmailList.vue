@@ -62,7 +62,7 @@
 
 <script>
 import {last as _last} from "lodash-es";
-import store from "../store";
+import {globalStore} from "../store";
 import SvgIcon from "./base_components/SvgIcon";
 
 const statusColor = (status) => {
@@ -99,14 +99,14 @@ export default {
         SvgIcon,
     },
     created(){
-        store.loadEmails();
+        globalStore.loadEmails();
     },
     data(){
         return {
             privateState: {
 
             },
-            sharedState: store.state
+            sharedState: globalStore.state
         }
     },
     methods: {
@@ -115,7 +115,7 @@ export default {
             if(!url){
                 return;
             }
-            store.loadEmails(url)
+            globalStore.loadEmails(url)
         },
         mostRecentStatus,
         mostRecentStatusClassName
@@ -129,7 +129,7 @@ export default {
                 return this.sharedState.paginatedEmails.per_page;
             },
             set() {
-                store.setperPage();
+                globalStore.setperPage();
             }
         },
         paginatedEmails() {
@@ -138,7 +138,7 @@ export default {
     },
     watch: {
         perPage(per_page){
-            store.loadEmails();
+            globalStore.loadEmails();
         },
     }
 }

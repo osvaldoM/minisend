@@ -8,6 +8,10 @@
                 <h2 class="font-bold text-black"> {{recipient}}</h2>
             </div>
         </div>
+
+        <h2>Emails history</h2>
+
+
     </div>
 </template>
 
