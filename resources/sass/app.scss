@@ -5,15 +5,15 @@
 
 @layer base {
     h1 {
-        @apply text-2xl font-bold mb-8;
+        @apply text-3xl font-bold mb-8 text-black;
     }
 
     h2 {
-        @apply text-xl font-bold mb-6;
+        @apply text-2xl font-bold mb-6 text-black;
     }
 
     .h3 {
-        @apply text-lg font-bold mb-6;
+        @apply text-xl font-bold mb-6 text-black;
     }
 
     p {
@@ -73,8 +73,7 @@ html, body {
 }
 
 .email-status {
-    @apply rounded-lg bg-gray-200 mr-2 px-4 py-1 inline-block;
-    min-width: 5rem;
+    @apply rounded bg-gray-200 mr-2 px-4 py-1 inline-block uppercase font-bold text-xs;
 }
 .default-status {
     @apply bg-gray-100 text-gray-700;
