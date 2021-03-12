@@ -16,10 +16,18 @@ class EmailController extends Controller
     {
         $search_query = $request->query('query');
 
+        $recipient = $request->query('recipient');
+
         $emails_query = Email::with(['message', 'statuses']);
 
         if($search_query) {
             $emails_query = $emails_query->whereLike(['message.from', 'message.to', 'message.subject'], $search_query);
+        }
+
+        if($recipient) {
+            $emails_query = $emails_query->whereHas('message', function ($query) use ($recipient) {
+                return $query->where('to', '=', $recipient);
+            });
         }
 
         return response()->json($emails_query->paginate()->withQueryString());

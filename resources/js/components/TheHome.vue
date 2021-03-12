@@ -2,11 +2,11 @@
     <div>
         <h1> Activity</h1>
 
-        <search-form></search-form>
+        <search-form :shared-store="store"></search-form>
 
         <p> List contains <strong class="font-bold">{{ emails ? emails.length : 0 }}</strong> items</p>
 
-        <emails-list></emails-list>
+        <emails-list :shared-store="store"></emails-list>
     </div>
 </template>
 
@@ -16,7 +16,9 @@ import SvgIcon from "./base_components/SvgIcon";
 
 import EmailsList from "./EmailList";
 import SearchForm from "./SearchForm";
-import {globalStore} from "../store";
+import {createStore} from "../store";
+
+const store = createStore();
 
 export default {
     components: {
@@ -30,10 +32,11 @@ export default {
     },
     data(){
         return {
+            store:store,
             privateState: {
 
             },
-            sharedState: globalStore.state
+            sharedState: store.state
         }
     },
     methods: {

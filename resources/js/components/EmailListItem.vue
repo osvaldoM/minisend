@@ -11,35 +11,34 @@
 
         <h2>Emails history</h2>
 
+        <email-list :shared-store="store"></email-list>
 
     </div>
 </template>
 
 <script>
 import axios from "axios";
+import EmailList from "./EmailList";
+import {createStore} from "../store";
+
+const store = createStore();
 
 export default {
+    components: {EmailList},
     data(){
         return {
             privateState: {
                 emailsToRecipient: null
-            }
+            },
+            store
         }
     },
     props: {},
     async created(){
-        const emails = await this.loadEmailsToRecipient();
-        this.setEmailsToRecipient(emails);
+        store.setRecipientAction(this.recipient);
     },
     methods: {
-        setEmailsToRecipient(emails){
-            this.privateState.emailsToRecipient = emails;
-        },
-        async loadEmailsToRecipient(){
-            return await axios.get(window.route('emailsToRecipient', {
-                'recipient': this.recipient
-            }));
-        }
+
     },
     computed: {
         recipient(){

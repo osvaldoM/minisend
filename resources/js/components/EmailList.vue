@@ -89,24 +89,29 @@ const mostRecentStatusClassName = (statuses) => {
 };
 export default {
     props: {
-        // paginatedEmails: {
-        //     type: Object,
-        //     default: null,
-        //     required: true
-        // }
+        sharedStore: {
+            type: Object,
+            default: null,
+            required: true
+        },
+        recipient: {
+            type: String,
+            default: null,
+            required: false
+        }
     },
     components: {
         SvgIcon,
     },
     created(){
-        globalStore.loadEmails();
+        this.sharedStore.loadEmails();
     },
     data(){
         return {
             privateState: {
 
             },
-            sharedState: globalStore.state
+            sharedState: this.sharedStore.state
         }
     },
     methods: {
@@ -115,7 +120,7 @@ export default {
             if(!url){
                 return;
             }
-            globalStore.loadEmails(url)
+            this.sharedStore.loadEmails(url)
         },
         mostRecentStatus,
         mostRecentStatusClassName
@@ -129,7 +134,7 @@ export default {
                 return this.sharedState.paginatedEmails.per_page;
             },
             set() {
-                globalStore.setperPage();
+                this.sharedStore.setperPage();
             }
         },
         paginatedEmails() {
@@ -138,7 +143,7 @@ export default {
     },
     watch: {
         perPage(per_page){
-            globalStore.loadEmails();
+            this.sharedStore.loadEmails();
         },
     }
 }

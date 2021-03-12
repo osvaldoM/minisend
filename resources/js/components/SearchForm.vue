@@ -8,10 +8,16 @@
 </template>
 
 <script>
-import {globalStore} from "../store";
 import SvgIcon from "./base_components/SvgIcon";
 
 export default {
+    props: {
+        sharedStore: {
+            type: Object,
+            default: null,
+            required: false
+        }
+    },
     components: {
         SvgIcon,
     },
@@ -20,14 +26,14 @@ export default {
             privateState: {
 
             },
-            sharedState: globalStore.state
+            sharedState: this.sharedStore.state
         }
     },
     methods: {
         async filterEmails(event){
             event.preventDefault();
             event.stopImmediatePropagation();
-            globalStore.loadEmails();
+            this.sharedStore.loadEmails();
         }
     },
     computed: {
@@ -36,7 +42,7 @@ export default {
                 return this.sharedState.search;
             },
             set(search){
-                globalStore.setSearchAction(search);
+                this.sharedStore.setSearchAction(search);
             }
         }
     }

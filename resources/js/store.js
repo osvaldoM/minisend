@@ -4,7 +4,12 @@ const store = {
     debug: true,
     state: {
         paginatedEmails: {},
-        search: ''
+        search: '',
+        recipient: ''
+    },
+    setRecipientAction(recipient) {
+        if (this.debug) console.log('setRecipientAction triggered with', recipient)
+        this.state.recipient = recipient;
     },
     setPaginatedEmailsAction(paginatedEmails) {
         if (this.debug) console.log('setPaginatedEmailsAction triggered with', paginatedEmails)
@@ -23,9 +28,11 @@ const store = {
         this.state.message = ''
     },
     async loadEmails(url){
+        console.log('loading emails to: ',this.state.recipient);
         return await axios.get(url || window.route('email.index',{
             'per_page': this.state.paginatedEmails ? this.state.paginatedEmails.per_page: '',
-            'query': this.state.search
+            'query': this.state.search,
+            'recipient': this.state.recipient
         })).then(resp => this.setPaginatedEmailsAction(resp.data));
     }
 }
