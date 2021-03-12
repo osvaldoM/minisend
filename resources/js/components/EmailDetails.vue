@@ -4,8 +4,9 @@
         <svg-icon class="mr-2" icon="arrow-left"></svg-icon> Back to activity
     </router-link>
 
+    <h1>Email activity</h1>
     <div class="flex">
-        <div v-if="email" class="shadow-md rounded bg-white flex flex-col p-8 items-start mb-8">
+        <div v-if="email" class="shadow-md rounded bg-white flex flex-col p-8 items-start mb-8 md:w-4/5 2xl:w-3/5">
             <table>
                 <colgroup>
                     <col style="width: 20%;">
@@ -63,7 +64,24 @@
                 </div>
             </div>
         </div>
-        <div>Latest events</div>
+        <div class="ml-10">
+            <h5 class="text-black text-base font-bold">Latest events</h5>
+
+            <ol class="timeline">
+                <li class="timeline-step" v-for="status in email.statuses">
+                    <span class="timeline-icon"></span>
+                    <time class="timeline-step-time text-xs">
+                        11:19:19
+                    </time>
+                    <div class="timeline-step-label">
+                        <span v-bind:class="`email-status success ${statusColor(status)}`">
+                            {{ status.name }}
+                        </span>
+                        <span class="mt-3"> {{status.pivot.status_message}}</span>
+                    </div>
+                </li>
+            </ol>
+        </div>
     </div>
 </div>
 </template>
@@ -71,7 +89,7 @@
 <script>
 import SvgIcon from "./base_components/SvgIcon";
 import axios from "../HTTP";
-import {mostRecentStatus, mostRecentStatusClassName} from "../Util";
+import {mostRecentStatus, mostRecentStatusClassName, statusColor} from "../Util";
 
 export default {
     components: {
@@ -114,11 +132,12 @@ export default {
             this.privateState.openTab = tabNumber
         },
         mostRecentStatus,
-        mostRecentStatusClassName
+        mostRecentStatusClassName,
+        statusColor
     }
 }
 </script>
 
-<style scoped>
+<style lang="scss">
 
 </style>

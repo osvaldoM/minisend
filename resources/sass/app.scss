@@ -13,7 +13,7 @@
     }
 
     .h3 {
-        @apply text-xl font-bold mb-6 text-black;
+        @apply text-2xl font-bold mb-6 text-black;
     }
 
     p {
@@ -64,12 +64,7 @@ html, body {
     @apply py-4 pr-4;
     &:first-child {
         @apply pl-4;
-        //padding-right:0;
     }
-}
-
-.main-content {
-
 }
 
 .email-status {
@@ -120,5 +115,68 @@ html, body {
 
 .tab-header {
     @apply cursor-pointer -mb-px text-center relative z-10;
-    top: 0px;
+    top: 0;
+}
+
+//timeline
+.timeline {
+    margin: 0 auto;
+    padding: 2em 0 3em;
+    list-style: none;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 200px;
+}
+
+.timeline-step {
+    text-align: center;
+    position: relative;
+    left: -20%;
+    height: 120px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+
+    &:before,
+    &:after {
+        content: "";
+        height: 100%;
+        background-color: #f1f1f1;
+        position: absolute;
+        z-index: 1;
+        width: 1%;
+        left: 49.5%;
+    }
+
+    &:last-child:before,
+    &:last-child:after {
+        display: none;
+    }
+}
+
+.timeline-icon {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    background-color: #d8d8d8;
+    border-radius: 50%;
+    padding: 0.5em;
+    max-width: 100%;
+    z-index: 10;
+    position: relative;
+}
+.timeline-step-time {
+    position: absolute;
+    left: 20%;
+}
+.timeline-step-label {
+    position: absolute;
+    left: 60%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: all .25s ease-out;
 }
