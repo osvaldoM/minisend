@@ -112,4 +112,14 @@ class EmailTest extends TestCase
         $this->assertEqualsCanonicalizing($testEmail, $email_with_random_recipient);
 
     }
+
+    public function testShowEmail()
+    {
+        $random_email = Arr::random($this->emails->toArray());
+
+        $response = $this->get(route('email.show', ['email' => $random_email['id']]));
+
+        $response->assertStatus(200)
+            ->assertJson($random_email);
+    }
 }

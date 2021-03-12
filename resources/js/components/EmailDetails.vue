@@ -67,7 +67,7 @@
         <div class="ml-10">
             <h5 class="text-black text-base font-bold">Latest events</h5>
 
-            <ol class="timeline">
+            <ol v-if="email" class="timeline">
                 <li class="timeline-step" v-for="status in email.statuses">
                     <span class="timeline-icon"></span>
                     <time class="timeline-step-time text-xs">

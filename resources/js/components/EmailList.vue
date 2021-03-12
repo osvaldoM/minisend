@@ -5,7 +5,7 @@
             <tr class="">
                 <td class="font-bold uppercase text-xs emails-table-column">Status</td>
                 <td class="font-bold uppercase text-xs emails-table-column">Sender</td>
-                <td class="font-bold uppercase text-xs emails-table-column">Recipient</td>
+                <td v-if="showRecipient" class="font-bold uppercase text-xs emails-table-column">Recipient</td>
                 <td class="font-bold uppercase text-xs emails-table-column">Subject</td>
                 <td class="font-bold uppercase text-xs emails-table-column">Date created</td>
                 <td class="font-bold uppercase text-xs emails-table-column">Actions</td>
@@ -18,17 +18,17 @@
                     </span>
                 </td>
                 <td class="emails-table-column text-black">{{ email.message.from }}</td>
-                <td class="emails-table-column text-black">
+                <td v-if="showRecipient" class="emails-table-column text-black">
                     <router-link class="underline" :to="{ name: 'emailsTo', params: { recipient: email.message.to }}">{{ email.message.to }}</router-link>
                 </td>
                 <td class="emails-table-column text-black">
-                    <router-link :to="{name: 'emailDetails', params: {'id': email.id}}" class="underline">{{ email.message.subject | truncate(40) }}</router-link>
+                    {{ email.message.subject | truncate(40) }}
                 </td>
                 <td class="emails-table-column">
                     {{ email.created_at | formatDate }}
                 </td>
                 <td class="emails-table-column">
-                    <router-link to="/" title="Details">
+                    <router-link :to="{name: 'emailDetails', params: {'id': email.id}}" title="Details">
                         <svg-icon icon="eye"></svg-icon>
                     </router-link>
                     <router-link to="/" title="Retry" v-if="mostRecentStatus(email.statuses).name === 'Failed'">
@@ -78,6 +78,11 @@ export default {
         recipient: {
             type: String,
             default: null,
+            required: false
+        },
+        showRecipient: {
+            type: Boolean,
+            default: true,
             required: false
         }
     },
