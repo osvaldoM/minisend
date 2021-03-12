@@ -53,7 +53,8 @@ class EmailController extends Controller
      */
     public function show(Email $email)
     {
-        //
+        $email->loadMissing(['message', 'statuses']);
+        return response()->json($email);
     }
 
     /**

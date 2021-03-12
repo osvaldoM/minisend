@@ -3,6 +3,7 @@ import Home from './components/TheHome'
 import Vue from "vue";
 import nprogress from 'nprogress'
 import EmailsToRecipient from "./components/EmailsToRecipient";
+import EmailDetails from "./components/EmailDetails";
 
 Vue.use(VueRouter)
 
@@ -27,7 +28,12 @@ const router = new VueRouter({
             name: 'emailsTo',
             component: EmailsToRecipient,
             props: true
-        },
+        },{
+            path: '/emails/:id',
+            name: 'emailDetails',
+            component: EmailDetails,
+            props: true
+        }
     ],
 });
 

@@ -117,3 +117,8 @@ html, body {
     border-radius: 50%;
     border: 1px solid rgba(0,0,0,.08);
 }
+
+.tab-header {
+    @apply cursor-pointer -mb-px text-center relative z-10;
+    top: 0px;
+}
