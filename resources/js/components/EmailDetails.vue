@@ -29,8 +29,8 @@
                 <tr>
                     <td class="py-4"> Status</td>
                     <td class="py-4">
-                        <span v-bind:class="`email-status ${mostRecentStatusClassName(email.statuses)}`">
-                        {{ mostRecentStatus(email.statuses).name }}
+                        <span v-bind:class="`email-status ${statusColor(email.current_status)}`">
+                        {{ email.current_status.name }}
                         </span>
                     </td>
                 </tr>
@@ -89,7 +89,7 @@
 <script>
 import SvgIcon from "./base_components/SvgIcon";
 import axios from "../HTTP";
-import {mostRecentStatus, mostRecentStatusClassName, statusColor} from "../Util";
+import {statusColor} from "../Util";
 
 export default {
     components: {
@@ -131,8 +131,6 @@ export default {
         toggleTabs: function(tabNumber){
             this.privateState.openTab = tabNumber
         },
-        mostRecentStatus,
-        mostRecentStatusClassName,
         statusColor
     }
 }

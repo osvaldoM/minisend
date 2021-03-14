@@ -53,6 +53,10 @@ class Email extends Model
         return $this->hasMany(Status::class)->orderBy('created_at', 'DESC');
     }
 
+    public function current_status()
+    {
+        return $this->hasOne(Status::class)->orderBy('created_at', 'DESC')->latest();
+    }
 
     public function message()
     {

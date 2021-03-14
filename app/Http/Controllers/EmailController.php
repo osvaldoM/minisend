@@ -20,7 +20,7 @@ class EmailController extends Controller
 
         $recipient = $request->query('recipient');
 
-        $emails_query = Email::with(['message', 'statuses'])->orderBy('created_at', 'DESC');
+        $emails_query = Email::with(['message', 'statuses','current_status'])->orderBy('created_at', 'DESC');
 
         if($search_query) {
             $emails_query = $emails_query->whereLike(['message.from', 'message.to', 'message.subject'], $search_query);
@@ -72,7 +72,7 @@ class EmailController extends Controller
      */
     public function show(Email $email)
     {
-        $email->loadMissing(['message', 'statuses']);
+        $email->loadMissing(['message', 'statuses','current_status']);
         return response()->json($email);
     }
 

@@ -13,8 +13,8 @@
             </thead>
             <tr class="mx-auto shadow bg-white my-4 px-2 border-b" v-for="email in emails">
                 <td class="emails-table-column text-black">
-                    <span v-bind:class="`email-status ${mostRecentStatusClassName(email.statuses)}`">
-                        {{ mostRecentStatus(email.statuses).name }}
+                    <span v-bind:class="`email-status ${statusColor(email.current_status)}`">
+                        {{ email.current_status.name }}
                     </span>
                 </td>
                 <td class="emails-table-column text-black">{{ email.message.from }}</td>
@@ -31,7 +31,7 @@
                     <router-link :to="{name: 'emailDetails', params: {'id': email.id}}" title="Details">
                         <svg-icon icon="eye"></svg-icon>
                     </router-link>
-                    <router-link to="/" title="Retry" v-if="mostRecentStatus(email.statuses).name === 'Failed'">
+                    <router-link to="/" title="Retry" v-if="email.current_status.name === 'Failed'">
                         <svg-icon icon="refresh" class="ml-3"></svg-icon>
                     </router-link>
                 </td>
@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import {mostRecentStatus, mostRecentStatusClassName, statusColor} from "../Util";
+import {statusColor} from "../Util";
 import SvgIcon from "./base_components/SvgIcon";
 
 export default {
@@ -108,8 +108,7 @@ export default {
             }
             this.sharedStore.loadEmails(url)
         },
-        mostRecentStatus,
-        mostRecentStatusClassName
+        statusColor
     },
     computed: {
         emails(){

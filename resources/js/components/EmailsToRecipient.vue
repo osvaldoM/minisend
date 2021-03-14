@@ -10,9 +10,9 @@
             <div class="gravatar mr-8"></div>
             <div class="">
                 <h2 class="font-bold text-black"> {{recipient}}</h2>
-                <div v-if="mostRecentEmailStatus" class="">
-                    <p v-bind:class="`mb-2 email-status ${mostRecentEmailStatusClassName}`">{{mostRecentEmailStatus.name}}</p>
-                    <p>On <time>{{mostRecentEmailStatus.created_at | formatDate}}</time> <strong class="font-bold"> {{mostRecentEmailStatus.message}}</strong></p>
+                <div v-if="mostRecentEmail" class="">
+                    <p v-bind:class="`mb-2 email-status ${statusColor(mostRecentEmail.status)}`">{{ mostRecentEmail.status.name }}</p>
+                    <p>On <time>{{ mostRecentEmail.created_at | formatDate }}</time> <strong class="font-bold"> {{ mostRecentEmail.message }}</strong></p>
                 </div>
             </div>
         </div>
@@ -28,7 +28,7 @@
 import EmailList from "./EmailList";
 import {createStore} from "../store";
 import SvgIcon from "./base_components/SvgIcon";
-import {mostRecentStatus, mostRecentStatusClassName} from "../Util";
+import {statusColor} from "../Util";
 
 
 const store = createStore();
@@ -52,7 +52,7 @@ export default {
         store.setRecipientAction(this.recipient);
     },
     methods: {
-
+        statusColor
     },
     computed: {
         recipient(){
@@ -61,13 +61,10 @@ export default {
         emails(){
             return this.sharedState.paginatedEmails.data;
         },
-        mostRecentEmailStatus() {
+        mostRecentEmail() {
             if(this.emails && this.emails.length) {
-                return mostRecentStatus(this.emails[0].statuses);
+                return this.emails[0].status;
             }
-        },
-        mostRecentEmailStatusClassName() {
-            return mostRecentStatusClassName(this.emails[0].statuses);
         }
     }
 }
