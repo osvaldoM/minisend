@@ -50,7 +50,6 @@ class EmailTest extends TestCase
 
     public function testListPaginatedEmails()
     {
-        //fix issue with sorting when using slice
         $per_page = 5;
         $current_page = 2;
 

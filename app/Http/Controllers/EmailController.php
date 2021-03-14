@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewEmailPosted;
 use App\Http\Requests\StoreEmailRequest;
+use App\Mail\UserMail;
 use App\Models\Email;
 use App\Models\Message;
 use Illuminate\Http\Request;
@@ -61,6 +63,8 @@ class EmailController extends Controller
         $email->message()->save($message);
         $email->setPosted();
 
+        event(new NewEmailPosted($email));
+
         return response()->json($email, 201);
     }
 
@@ -91,4 +95,7 @@ class EmailController extends Controller
         return  response()->json($emails_to_recipient);
     }
 
+    function open_in_browser (Email $email) {
+        return new UserMail($email);
+    }
 }
