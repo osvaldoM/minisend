@@ -20,7 +20,7 @@ class EmailController extends Controller
 
         $recipient = $request->query('recipient');
 
-        $emails_query = Email::with(['message', 'statuses'])->orderBy('created_at', 'ASC');
+        $emails_query = Email::with(['message', 'statuses'])->orderBy('created_at', 'DESC');
 
         if($search_query) {
             $emails_query = $emails_query->whereLike(['message.from', 'message.to', 'message.subject'], $search_query);

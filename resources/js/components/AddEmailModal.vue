@@ -59,7 +59,10 @@ export default {
             const formData = new FormData($form);
 
             axios.post(window.route('email.store'), formData).then( res => {
-                console.log(res);
+                console.log(res.id);
+                this.$router.push({name: 'emailDetails', params: {id: res.data.id}});
+            }).catch( err => {
+
             })
         },
         addEventListeners() {

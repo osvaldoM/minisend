@@ -36,7 +36,7 @@
                 </tr>
             </table>
 
-            <div class="flex flex-wrap">
+            <div class="flex flex-wrap w-full">
                 <div class="w-full">
                     <ul class="flex pl-10 mb-0 list-none flex-wrap pt-3 flex-row border-b">
                         <li class="tab-header last:mr-0">
