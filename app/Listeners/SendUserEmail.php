@@ -28,7 +28,15 @@ class SendUserEmail
      */
     public function handle(NewEmailPosted $event)
     {
-        Mail::to($event->email->message->to)
-            ->send(new UserMail($event->email));
+        try {
+            if($event->email->should_fail){
+                throw new \Exception('Should fail param was set to true');
+            }
+            Mail::to($event->email->message->to)
+                ->send(new UserMail($event->email));
+        }
+        catch (\Exception $e) {
+            $event->email->setFailed($e->getMessage());
+        }
     }
 }

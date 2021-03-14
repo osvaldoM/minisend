@@ -26,6 +26,8 @@ class LogSentMessage
      */
     public function handle(MessageSent $event)
     {
-        $event->message->email->setSent();
+        if(!empty($event->message->email)){
+            $event->message->email->setSent();
+        }
     }
 }

@@ -74,10 +74,10 @@
                         11:19:19
                     </time>
                     <div class="timeline-step-label">
-                        <span v-bind:class="`email-status success ${statusColor(status)}`">
+                        <span v-bind:class="`email-status text-left success ${statusColor(status)}`">
                             {{ status.name }}
                         </span>
-                        <span class="mt-3"> {{status.message}}</span>
+                        <span class="mt-3 text-left"> {{status.message}}</span>
                     </div>
                 </li>
             </ol>
