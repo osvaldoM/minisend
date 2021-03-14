@@ -28,17 +28,14 @@ class DatabaseSeeder extends Seeder
             'message' => 'Email failed'
         ])->make();
 
-        $count = 0;
         Email::factory()->count(30)->has(Status::factory()->state([
             'name' => $postedStatus_name,
             'message' => 'Email is queued for sending'
-        ]))->create()->each(function ($email) use ($sentStatus, $failedStatus, &$count) {
+        ]))->create()->each(function ($email) use ($sentStatus, $failedStatus) {
             $email->message()->save(Message::factory()->make());
             $email->statuses()->create(
                 Arr::random([$sentStatus->toArray(), $failedStatus->toArray()])
             );
-            $count++;
         });
-        dd($count);
     }
 }

@@ -86,7 +86,7 @@ class EmailController extends Controller
     {
         $emails_to_recipient =  Email::whereHas('message', function ($query) use ($recipient) {
            return $query->where('to', '=', $recipient);
-        })->with(['message', 'statuses'])->get();
+        })->with(['message', 'statuses', 'current_status'])->get();
 
         return  response()->json($emails_to_recipient);
     }

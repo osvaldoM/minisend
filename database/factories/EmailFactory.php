@@ -23,7 +23,7 @@ class EmailFactory extends Factory
     public function definition()
     {
         return [
-//            'message_id' => Message::factory(),
+            'should_fail' => 0,
         ];
     }
 }
