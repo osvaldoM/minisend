@@ -10,6 +10,14 @@ class Message extends Model
 
     use HasFactory;
 
+    protected $fillable = [
+        'from',
+        'to',
+        'subject',
+        'text_content',
+        'html_content',
+    ];
+
     public function email()
     {
         return $this->belongsTo(Email::class);

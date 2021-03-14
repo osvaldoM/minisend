@@ -9,8 +9,12 @@ class Status extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'message'
+    ];
     public function emails()
     {
-        return $this->belongsToMany(Email::class)->withPivot('status_message');
+        return $this->belongsToMany(Email::class);
     }
 }

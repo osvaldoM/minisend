@@ -6,17 +6,53 @@ use App\Traits\Paginatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Email extends Model
 {
+    public static $STATUS_SENT = 'Sent';
+    public static $STATUS_FAILED = 'Failed';
+    public static $STATUS_POSTED = 'Posted';
+
     use HasFactory;
     use Paginatable;
 
     protected $perPage = 10;
 
+    protected $fillable = [
+        'should_fail'
+    ];
+
+    public function setPosted($message='Email is queued for sending')
+    {
+        $this->statuses()->create([
+          'name' => self::$STATUS_POSTED,
+          'message' => $message
+        ]
+        );
+    }
+    public function setSent($message='Email is sent')
+    {
+        $this->statuses()->create([
+          'name' => self::$STATUS_SENT,
+          'message' => $message
+        ]
+        );
+    }
+    public function setFailed($message='Email failed')
+    {
+        $this->statuses()->create([
+          'name' => self::$STATUS_FAILED,
+          'message' => $message
+        ]
+        );
+    }
+
+
     public function statuses()
     {
-        return $this->belongsToMany(Status::class)->withPivot('status_message');
+        return $this->hasMany(Status::class)->orderBy('created_at', 'DESC');
     }
+
 
     public function message()
     {

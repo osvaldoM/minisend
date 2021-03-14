@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreEmailRequest;
 use App\Models\Email;
+use App\Models\Message;
 use Illuminate\Http\Request;
 
 class EmailController extends Controller
@@ -18,7 +20,7 @@ class EmailController extends Controller
 
         $recipient = $request->query('recipient');
 
-        $emails_query = Email::with(['message', 'statuses']);
+        $emails_query = Email::with(['message', 'statuses'])->orderBy('created_at', 'ASC');
 
         if($search_query) {
             $emails_query = $emails_query->whereLike(['message.from', 'message.to', 'message.subject'], $search_query);
@@ -40,9 +42,26 @@ class EmailController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreEmailRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $message = Message::make([
+            'from' => $validated['from'],
+            'to' => $validated['to'],
+            'subject' => $validated['subject'],
+            'text_content' => $validated['text_content'],
+            'html_content' => $validated['html_content'],
+        ]);
+
+        $email = Email::create([
+            'should_fail' => $validated['should_fail']
+        ]);
+
+        $email->message()->save($message);
+        $email->setPosted();
+
+        return response()->json($email, 201);
     }
 
     /**
@@ -72,14 +91,4 @@ class EmailController extends Controller
         return  response()->json($emails_to_recipient);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Email  $email
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Email $email)
-    {
-        //
-    }
 }

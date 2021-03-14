@@ -15,6 +15,7 @@ class CreateEmailsTable extends Migration
     {
         Schema::create('emails', function (Blueprint $table) {
             $table->id();
+            $table->boolean('should_fail')->nullable();
             $table->timestamps();
         });
     }

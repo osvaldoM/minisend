@@ -17,23 +17,28 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-        $postedStatus = Status::factory()->state([
-            'name' => 'Posted'
-        ])->create();
-        $sentStatus = Status::factory()->state([
-            'name' => 'Sent'
-        ])->create();
-        $failedStatus = Status::factory()->state([
-            'name' => 'Failed'
-        ])->create();
+        $postedStatus_name = 'Posted';
 
-        Email::factory()->count(30)->hasAttached($postedStatus)->create()->each(function ($email) use (&$sentStatus, &$failedStatus) {
+        $sentStatus = Status::factory()->state([
+            'name' => 'Sent',
+            'message' => 'Email is sent'
+        ])->make();
+        $failedStatus = Status::factory()->state([
+            'name' => 'Failed',
+            'message' => 'Email failed'
+        ])->make();
+
+        $count = 0;
+        Email::factory()->count(30)->has(Status::factory()->state([
+            'name' => $postedStatus_name,
+            'message' => 'Email is queued for sending'
+        ]))->create()->each(function ($email) use ($sentStatus, $failedStatus, &$count) {
             $email->message()->save(Message::factory()->make());
-            $email->statuses()->attach(
-                Arr::random([$sentStatus, $failedStatus]),
-                ['status_message' => Arr::random(['request timout', 'smtp auth error'])]
+            $email->statuses()->create(
+                Arr::random([$sentStatus->toArray(), $failedStatus->toArray()])
             );
+            $count++;
         });
+        dd($count);
     }
 }

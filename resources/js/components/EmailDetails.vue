@@ -77,7 +77,7 @@
                         <span v-bind:class="`email-status success ${statusColor(status)}`">
                             {{ status.name }}
                         </span>
-                        <span class="mt-3"> {{status.pivot.status_message}}</span>
+                        <span class="mt-3"> {{status.message}}</span>
                     </div>
                 </li>
             </ol>

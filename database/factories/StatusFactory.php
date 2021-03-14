@@ -24,7 +24,8 @@ class StatusFactory extends Factory
     public function definition()
     {
         return [
-            'name' => Arr::random(['posted', 'sent', 'failed'])
+            'name' => Arr::random(['Posted', 'Sent', 'Failed']),
+            'message' => Arr::random(['posted', 'sent', 'failed', ''])
         ];
     }
 }

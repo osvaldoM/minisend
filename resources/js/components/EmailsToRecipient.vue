@@ -12,7 +12,7 @@
                 <h2 class="font-bold text-black"> {{recipient}}</h2>
                 <div v-if="mostRecentEmailStatus" class="">
                     <p v-bind:class="`mb-2 email-status ${mostRecentEmailStatusClassName}`">{{mostRecentEmailStatus.name}}</p>
-                    <p>On <time>{{mostRecentEmailStatus.created_at | formatDate}}</time> <strong class="font-bold"> {{mostRecentEmailStatus.pivot.status_message}}</strong></p>
+                    <p>On <time>{{mostRecentEmailStatus.created_at | formatDate}}</time> <strong class="font-bold"> {{mostRecentEmailStatus.message}}</strong></p>
                 </div>
             </div>
         </div>

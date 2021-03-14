@@ -16,6 +16,9 @@ class CreateStatusesTable extends Migration
         Schema::create('statuses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->text('message')->nullable();
+            $table->unsignedBigInteger('email_id');
+            $table->foreign('email_id')->references('id')->on('emails');
             $table->timestamps();
         });
     }
