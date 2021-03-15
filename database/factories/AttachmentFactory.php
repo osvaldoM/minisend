@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Attachment;
 use App\Models\Message;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Storage;
 
 class AttachmentFactory extends Factory
 {
@@ -23,7 +24,7 @@ class AttachmentFactory extends Factory
     public function definition()
     {
         return [
-            'filename' => $this->faker->file(base_path('resources/sample-attachments'), storage_path('app/attachments'), false),
+            'filename' => $this->faker->file(base_path('resources/sample-attachments'), Storage::disk()->path(config('uploads.attachments_folder_path')), false),
 //            'message_id' => Message::factory()
         ];
     }
