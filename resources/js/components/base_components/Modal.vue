@@ -46,7 +46,7 @@
     vertical-align: middle;
 }
 .modal-container {
-    max-width: 1200px;
+    max-width: 900px;
     margin: 0px auto;
     padding: 20px 30px;
     background-color: #fff;

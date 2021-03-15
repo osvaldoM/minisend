@@ -8,12 +8,15 @@
                 <input required type="email" name="from" placeholder="From address" class="w-full rounded-lg bg-gray-200 px-4 py-2 mb-2" />
                 <input required type="email" name="to" placeholder="To address" class="w-full rounded-lg bg-gray-200 px-4 py-2 mb-2" />
                 <input required type="text" name="subject" placeholder="Subject" class="w-full rounded-lg bg-gray-200 px-4 py-2 mb-2" />
-                <textarea required name="html_content" placeholder="Html message" class="w-full rounded-lg bg-gray-200 px-4 py-2 mb-2" cols="5" rows="10">
+                <textarea required name="html_content" placeholder="Html message" class="w-full rounded-lg bg-gray-200 px-4 py-2 mb-2" cols="5" rows="6">
                 </textarea>
-                <textarea required name="text_content" placeholder="Text message" class="w-full rounded-lg bg-gray-200 px-4 py-2 mb-2" cols="5" rows="10">
+                <textarea required name="text_content" placeholder="Text message" class="w-full rounded-lg bg-gray-200 px-4 py-2 mb-2" cols="5" rows="6">
                 </textarea>
-                <input name="attachments[]" type="file" placeholder="attachments" multiple/>
-                <label>
+                <label class="block mb-2">
+                    Attachments
+                    <input name="attachments[]" type="file" placeholder="attachments" multiple/>
+                </label>
+                <label class="block" title="email failing will fail if checked">
                     Should fail
                     <input name="should_fail" type="checkbox">
                 </label>

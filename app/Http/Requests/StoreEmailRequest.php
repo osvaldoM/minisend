@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Helpers\Helper;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StoreEmailRequest extends FormRequest
 {
@@ -54,6 +55,7 @@ class StoreEmailRequest extends FormRequest
     public function rules()
     {
         $extensions = $this->extension_whitelist();
+
         return [
             'from' => 'required|email',
             'to' => 'required|email',
@@ -61,7 +63,9 @@ class StoreEmailRequest extends FormRequest
             'should_fail' => 'sometimes|boolean',
             'text_content' => 'required',
             'html_content' => 'sometimes',
-            'attachments[].*' => "sometimes|file|mimes:$extensions|max:5000" //TODO add docx, xlsx, pptx etc
+            'attachments[].*' => "sometimes|file|mimes:$extensions|max:5000",
+            'attachments.*' => "sometimes|file|mimes:$extensions|max:5000",
+
         ];
     }
 
@@ -78,6 +82,11 @@ class StoreEmailRequest extends FormRequest
             $this->afterValidation($validator);
         });
     }
+
+//    protected function failedValidation(Validator $validator) {
+//        $message = $validator->errors()->all();
+//        throw new HttpResponseException(response()->json(['status' => 0,'messages' => $message]));
+//    }
 
     /**
      * Clean up fields after validation
@@ -98,7 +107,8 @@ class StoreEmailRequest extends FormRequest
     {
         return [
             'subject.max' => 'Use some common sense! Your subject cannot be the size of an email :(',
-            'attachments[].*.mimes' => 'Only Images, documents, audios and videos are allowed.'
+//            'attachments.*.mimes' => 'Only Images, documents, audios and videos are allowed.',
+            'attachments.*.max' => 'Max upload size(5MB) exceeded.'
         ];
     }
 }

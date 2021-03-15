@@ -149,7 +149,7 @@ class EmailTest extends TestCase
 
         $fake_email->message = $fake_message->toArray();
 
-        $file_to_upload = UploadedFile::fake()->image('');
+        $file_to_upload = UploadedFile::fake()->image('testimage.png');
         $file_name = $file_to_upload->hashName();
 
         $response = $this->json(
