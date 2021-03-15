@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Events\NewEmailPosted;
+use App\Events\EmailResend;
 use App\Http\Requests\StoreEmailRequest;
 use App\Mail\UserMail;
+use App\Models\Attachment;
 use App\Models\Email;
 use App\Models\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class EmailController extends Controller
 {
@@ -22,7 +25,7 @@ class EmailController extends Controller
 
         $recipient = $request->query('recipient');
 
-        $emails_query = Email::with(['message', 'statuses','current_status'])->orderBy('created_at', 'DESC');
+        $emails_query = Email::with(['message', 'message.attachments', 'statuses','current_status'])->orderBy('created_at', 'DESC');
 
         if($search_query) {
             $emails_query = $emails_query->whereLike(['message.from', 'message.to', 'message.subject'], $search_query);
@@ -61,11 +64,36 @@ class EmailController extends Controller
         ]);
 
         $email->message()->save($message);
+        $attachments = [];
+
+        if ($request->hasfile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $hashname = $file->hashName();
+                $path = Storage::putFileAs(config('uploads.attachments_folder_path'), $file, $hashname);
+
+                $attachments[] = Attachment::make([
+                   'filename' => $hashname,
+                ]);
+            }
+        }
+
+        $email->message->attachments()->saveMany($attachments);
+
         $email->setPosted();
 
         event(new NewEmailPosted($email));
 
         return response()->json($email, 201);
+    }
+
+    /**
+     * @param Email $email
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function resend(Email $email)
+    {
+        event(New EmailResend($email));
+        return response()->json($email);
     }
 
     /**
@@ -76,7 +104,7 @@ class EmailController extends Controller
      */
     public function show(Email $email)
     {
-        $email->loadMissing(['message', 'statuses','current_status']);
+        $email->loadMissing(['message', 'message.attachments', 'statuses','current_status']);
         return response()->json($email);
     }
 
@@ -90,7 +118,7 @@ class EmailController extends Controller
     {
         $emails_to_recipient =  Email::whereHas('message', function ($query) use ($recipient) {
            return $query->where('to', '=', $recipient);
-        })->with(['message', 'statuses', 'current_status'])->get();
+        })->with(['message', 'message.attachments', 'statuses', 'current_status'])->get();
 
         return  response()->json($emails_to_recipient);
     }

@@ -25,8 +25,8 @@ class MessageFactory extends Factory
         return [
             'from' => $this->faker->email,
             'to' => $this->faker->email,
-            'subject' => $this->faker->text(100),
-            'html_content' => trim($this->faker->randomHtml(2, 300)),
+            'subject' => $this->faker->text(10),
+            'html_content' => trim($this->faker->randomHtml(2, 20)),
             'text_content' => function(array $attributes) {
                 //converting html to text using a DOMDocument would be the ideal solution. however, this should be able to handle simple test cases
                 return preg_replace( "/\n\s+/", "\n", rtrim(html_entity_decode(strip_tags($attributes['html_content']))) );

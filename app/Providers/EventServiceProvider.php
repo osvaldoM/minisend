@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Events\EmailResend;
 use App\Events\NewEmailPosted;
 use App\Listeners\SendUserEmail;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -18,6 +19,9 @@ class EventServiceProvider extends ServiceProvider
         NewEmailPosted::class => [
             SendUserEmail::class,
         ],
+//        EmailResend::class => [
+//          SendUserEmail::class
+//        ],
         'Illuminate\Mail\Events\MessageSending' => [
             'App\Listeners\LogSendingMessage',
         ],

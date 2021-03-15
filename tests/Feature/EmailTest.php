@@ -3,12 +3,15 @@
 namespace Tests\Feature;
 
 use App\Helpers\Helper;
+use App\Models\Attachment;
 use App\Models\Email;
 use App\Models\Message;
 use App\Models\Status;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class EmailTest extends TestCase
@@ -25,28 +28,29 @@ class EmailTest extends TestCase
     {
         parent::setUp();
 
-        $postedStatus_name = 'Posted';
-
-        $sentStatus = Status::factory()->state([
-            'name' => 'Sent',
-            'message' => 'Email is sent'
-        ])->make();
-        $failedStatus = Status::factory()->state([
-            'name' => 'Failed',
-            'message' => 'Email failed'
-        ])->make();
-
-        $this->emails = Email::factory()->count(10)->has(Status::factory()->state([
-            'name' => $postedStatus_name,
-            'message' => 'Email is queued for sending'
-        ]))->create()->each(function ($email) use ($sentStatus, $failedStatus) {
-            $email->message()->save(Message::factory()->make());
-            $email->statuses()->create(
-                Arr::random([$sentStatus->toArray(), $failedStatus->toArray()])
-            );
-        });
-
-        $this->emails->load(['statuses', 'message','current_status']);
+//        $postedStatus_name = 'Posted';
+//
+//        $sentStatus = Status::factory()->state([
+//            'name' => 'Sent',
+//            'message' => 'Email is sent'
+//        ])->make();
+//        $failedStatus = Status::factory()->state([
+//            'name' => 'Failed',
+//            'message' => 'Email failed'
+//        ])->make();
+//
+//        $this->emails = Email::factory()->count(10)->has(Status::factory()->state([
+//            'name' => $postedStatus_name,
+//            'message' => 'Email is queued for sending'
+//        ]))->create()->each(function ($email) use ($sentStatus, $failedStatus) {
+//            $email->message()->save(Message::factory()->make());
+//            $email->message->attachments()->saveMany(Attachment::factory()->count(rand(0,2))->make());
+//            $email->statuses()->create(
+//                Arr::random([$sentStatus->toArray(), $failedStatus->toArray()])
+//            );
+//        });
+//
+//        $this->emails->load(['statuses', 'message', 'message.attachments', 'current_status']);
     }
 
     public function testListPaginatedEmails()
@@ -136,18 +140,24 @@ class EmailTest extends TestCase
             ->assertJson($random_email);
     }
 
-    public function testCreateHotel()
+    public function testCreateEmail()
     {
+
         $fake_email = Email::factory()->make();
         $fake_message = Message::factory()->make();
         $fake_message->html_content = Helper::removeUnwantedTags($fake_message->html_content);
 
         $fake_email->message = $fake_message->toArray();
 
-        $response = $this->post(route('email.store'), $fake_message->toArray());
+        $file_to_upload = UploadedFile::fake()->image('');
+        $file_name = $file_to_upload->hashName();
+
+        $response = $this->post(route('email.store'), array_merge($fake_message->toArray(), ['attachments' => [$file_to_upload]]));
 
         $response->assertStatus(201)
             ->assertJson($fake_email->toArray());
         $this->assertDatabaseHas('messages', $fake_message->toArray());
+
+        Storage::disk('local')->assertExists(config('uploads.attachments_folder_path').$file_name);
     }
 }

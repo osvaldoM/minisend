@@ -1,0 +1,30 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Models\Attachment;
+use App\Models\Message;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class AttachmentFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Attachment::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'filename' => $this->faker->file(base_path('resources/sample-attachments'), storage_path('app/attachments'), false),
+//            'message_id' => Message::factory()
+        ];
+    }
+}

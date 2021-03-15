@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Attachment;
 use App\Models\Email;
 use App\Models\Message;
 use App\Models\Status;
@@ -33,6 +34,7 @@ class DatabaseSeeder extends Seeder
             'message' => 'Email is queued for sending'
         ]))->create()->each(function ($email) use ($sentStatus, $failedStatus) {
             $email->message()->save(Message::factory()->make());
+            $email->message->attachments()->saveMany(Attachment::factory()->count(rand(0,2))->make());
             $email->statuses()->create(
                 Arr::random([$sentStatus->toArray(), $failedStatus->toArray()])
             );

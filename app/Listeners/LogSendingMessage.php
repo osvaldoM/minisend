@@ -26,6 +26,8 @@ class LogSendingMessage
      */
     public function handle(MessageSending $event)
     {
+//        var_dump($event->message->email);
+
 //        var_dump($event);
     }
 }

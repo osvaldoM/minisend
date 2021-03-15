@@ -22,4 +22,10 @@ class Message extends Model
     {
         return $this->belongsTo(Email::class);
     }
+
+    public function attachments()
+    {
+        return $this->hasMany(Attachment::class)->orderBy('created_at', 'DESC');
+    }
+
 }

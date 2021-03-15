@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Models\Email;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,20 +10,18 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewEmailPosted
+class EmailResend
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    public $email;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Email $email)
+    public function __construct()
     {
-        $this->email = $email;
+        //
     }
 
     /**

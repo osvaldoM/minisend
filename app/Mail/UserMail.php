@@ -32,7 +32,9 @@ class UserMail extends Mailable
     public function build()
     {
         $email = $this->email;
-        return $this
+
+
+        $email_config = $this
             ->withSwiftMessage(function ($message) use($email) {
                 $message->email = $email;
             })
@@ -43,5 +45,11 @@ class UserMail extends Mailable
                 $this->email->message->toArray(),
                 ['email_id' => $this->email->id]
             ));
+
+        foreach($email->message->attachments as $attachment){
+            $email_config->attachFromStorage($attachment->full_path);
+        }
+
+        return $email_config;
     }
 }

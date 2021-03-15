@@ -31,7 +31,7 @@ class StoreEmailRequest extends FormRequest
             'should_fail' => 'sometimes|boolean',
             'text_content' => 'required',
             'html_content' => 'sometimes',
-            'attachments' => 'sometimes|file|image|max:5000'
+//            'attachments' => 'sometimes|file|image|max:5000'
         ];
     }
 
