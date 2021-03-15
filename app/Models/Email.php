@@ -22,6 +22,9 @@ class Email extends Model
         'should_fail'
     ];
 
+    protected $casts = [
+        'should_fail' => 'boolean',
+    ];
     public function setPosted($message='Email is queued for sending')
     {
         $this->statuses()->create([

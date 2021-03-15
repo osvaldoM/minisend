@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Helpers\Helper;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreEmailRequest extends FormRequest
@@ -37,27 +38,20 @@ class StoreEmailRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'should_fail' => $this->should_fail == 'on' ? true: false,
-            'html_content' => $this->removeUnwantedTags($this->html_content),
+            'should_fail' => ($this->should_fail == 'on' || $this->should_fail == true) ? true: false,
         ]);
     }
 
-    private function removeUnwantedTags($html)
+    protected function getValidatorInstance()
     {
-        $dom = new \DOMDocument();
+        return parent::getValidatorInstance()->after(function ($validator) {
+            $this->afterValidation($validator);
+        });
+    }
 
-        $dom->loadHTML($html);
-
-        $tags_to_remove = array('script','style','iframe','link');
-
-        foreach($tags_to_remove as $tag){
-            $elements = $dom->getElementsByTagName($tag);
-            foreach($elements as $item){
-                $item->parentNode->removeChild($item);
-            }
-        }
-        return $dom->saveHTML();
-
+    protected function afterValidation($validator)
+    {
+        $this->html_content = Helper::removeUnwantedTags($validator->valid()['html_content']);
     }
 
     /**

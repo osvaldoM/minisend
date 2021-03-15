@@ -23,7 +23,7 @@ class EmailFactory extends Factory
     public function definition()
     {
         return [
-            'should_fail' => 0,
+            'should_fail' => false,
         ];
     }
 }

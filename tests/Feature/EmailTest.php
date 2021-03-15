@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Helpers\Helper;
 use App\Models\Email;
 use App\Models\Message;
 use App\Models\Status;
@@ -133,5 +134,20 @@ class EmailTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJson($random_email);
+    }
+
+    public function testCreateHotel()
+    {
+        $fake_email = Email::factory()->make();
+        $fake_message = Message::factory()->make();
+        $fake_message->html_content = Helper::removeUnwantedTags($fake_message->html_content);
+
+        $fake_email->message = $fake_message->toArray();
+
+        $response = $this->post(route('email.store'), $fake_message->toArray());
+
+        $response->assertStatus(201)
+            ->assertJson($fake_email->toArray());
+        $this->assertDatabaseHas('messages', $fake_message->toArray());
     }
 }
