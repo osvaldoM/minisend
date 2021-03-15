@@ -17,6 +17,7 @@ class CreateAttachmentsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->string('filename');
+            $table->string('original_filename');
             $table->unsignedBigInteger('message_id');
             $table->foreign('message_id')->references('id')->on('messages');
         });

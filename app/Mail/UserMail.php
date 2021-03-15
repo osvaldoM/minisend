@@ -47,7 +47,7 @@ class UserMail extends Mailable
             ));
 
         foreach($email->message->attachments as $attachment){
-            $email_config->attachFromStorage($attachment->full_path);
+            $email_config->attachFromStorage($attachment->full_path, $attachment->original_filename);
         }
 
         return $email_config;

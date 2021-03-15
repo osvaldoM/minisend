@@ -69,10 +69,11 @@ class EmailController extends Controller
         if ($request->hasfile('attachments')) {
             foreach ($request->file('attachments') as $file) {
                 $hashname = $file->hashName();
-                $path = Storage::putFileAs(config('uploads.attachments_folder_path'), $file, $hashname);
+                Storage::putFileAs(config('uploads.attachments_folder_path'), $file, $hashname);
 
                 $attachments[] = Attachment::make([
                    'filename' => $hashname,
+                    'original_filename' => $file->getClientOriginalName()
                 ]);
             }
         }

@@ -31,7 +31,8 @@ class StoreEmailRequest extends FormRequest
             'should_fail' => 'sometimes|boolean',
             'text_content' => 'required',
             'html_content' => 'sometimes',
-//            'attachments' => 'sometimes|file|image|max:5000'
+            'attachments' => 'sometimes', //TODO add docx, xlsx, pptx etc
+//            'attachments.*' => 'sometimes|file|mimes:pdf,jpeg,gif,png|max:5000' //TODO add docx, xlsx, pptx etc
         ];
     }
 
@@ -63,6 +64,7 @@ class StoreEmailRequest extends FormRequest
     {
         return [
             'subject.max' => 'Use some common sense! Your subject cannot be the size of an email :(.',
+            'mimes' => 'Only PDF, JPEG, PNG are allowed.'
         ];
     }
 }

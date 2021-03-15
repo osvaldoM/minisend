@@ -25,7 +25,9 @@ class AttachmentFactory extends Factory
     {
         return [
             'filename' => $this->faker->file(base_path('resources/sample-attachments'), Storage::disk()->path(config('uploads.attachments_folder_path')), false),
-//            'message_id' => Message::factory()
+            'original_filename' => function (array $attributes) {
+                    return 'original-'.$attributes['filename'];
+            }
         ];
     }
 }
