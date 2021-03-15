@@ -152,9 +152,14 @@ class EmailTest extends TestCase
         $file_to_upload = UploadedFile::fake()->image('');
         $file_name = $file_to_upload->hashName();
 
-        $response = $this->post(
+        $response = $this->json(
+            'POST',
             route('email.store'),
-            array_merge($fake_message->toArray(), ['attachments' => [$file_to_upload]])
+            array_merge($fake_message->toArray(), [
+                'attachments' => [
+                    0 => $file_to_upload
+                ]
+            ])
         );
 
         $response

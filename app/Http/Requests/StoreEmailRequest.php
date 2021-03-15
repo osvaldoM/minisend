@@ -3,10 +3,39 @@
 namespace App\Http\Requests;
 
 use App\Helpers\Helper;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreEmailRequest extends FormRequest
 {
+    private $image_ext = [
+        'jpg', 'jpeg', 'png', 'gif', 'ai', 'svg', 'eps', 'ps'
+    ];
+
+    private $audio_ext = [
+        'mp3', 'ogg', 'mpga'
+    ];
+
+    private $video_ext = [
+        'mp4', 'mpeg'
+    ];
+
+    private $document_ext = [
+        'doc', 'docx', 'dotx', 'pdf', 'odt', 'xls', 'xlsm', 'xlsx', 'ppt', 'pptx', 'vsd'
+    ];
+
+    /**
+     * Merge all listed extensions into one massive array
+     *
+     * @return array Extensions of all file types
+     */
+    private function extension_whitelist()
+    {
+        $extensions =  array_merge($this->image_ext, $this->audio_ext, $this->video_ext, $this->document_ext);
+
+        return implode(',', $extensions);
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -24,6 +53,7 @@ class StoreEmailRequest extends FormRequest
      */
     public function rules()
     {
+        $extensions = $this->extension_whitelist();
         return [
             'from' => 'required|email',
             'to' => 'required|email',
@@ -31,8 +61,7 @@ class StoreEmailRequest extends FormRequest
             'should_fail' => 'sometimes|boolean',
             'text_content' => 'required',
             'html_content' => 'sometimes',
-            'attachments' => 'sometimes', //TODO add docx, xlsx, pptx etc
-//            'attachments.*' => 'sometimes|file|mimes:pdf,jpeg,gif,png|max:5000' //TODO add docx, xlsx, pptx etc
+            'attachments[].*' => "sometimes|file|mimes:$extensions|max:5000" //TODO add docx, xlsx, pptx etc
         ];
     }
 
@@ -50,7 +79,12 @@ class StoreEmailRequest extends FormRequest
         });
     }
 
-    protected function afterValidation($validator)
+    /**
+     * Clean up fields after validation
+     *
+     * @param Validator $validator
+     */
+    protected function afterValidation(Validator $validator)
     {
         $this->html_content = Helper::removeUnwantedTags($validator->valid()['html_content']);
     }
@@ -63,8 +97,8 @@ class StoreEmailRequest extends FormRequest
     public function messages()
     {
         return [
-            'subject.max' => 'Use some common sense! Your subject cannot be the size of an email :(.',
-            'mimes' => 'Only PDF, JPEG, PNG are allowed.'
+            'subject.max' => 'Use some common sense! Your subject cannot be the size of an email :(',
+            'attachments[].*.mimes' => 'Only Images, documents, audios and videos are allowed.'
         ];
     }
 }

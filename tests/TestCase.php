@@ -16,5 +16,10 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
         Storage::fake('local');
         Storage::makeDirectory(config('uploads.attachments_folder_path'));
+        $this->withHeaders([
+            'Accept' => 'application/json',
+            'X-Requested-With' => 'XMLHttpRequest'
+        ]);
+        $this->withoutExceptionHandling();
     }
 }
