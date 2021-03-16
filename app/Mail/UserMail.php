@@ -39,6 +39,7 @@ class UserMail extends Mailable
                 $message->email = $email;
             })
             ->from($this->email->message->from)
+            ->subject($this->email->message->subject)
             ->view('emails.email-form')
             ->text('emails.email-form_plain')
             ->with(array_merge(

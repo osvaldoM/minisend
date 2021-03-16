@@ -11,8 +11,8 @@
             <div class="">
                 <h2 class="font-bold text-black"> {{recipient}}</h2>
                 <div v-if="mostRecentEmail" class="">
-                    <p v-bind:class="`mb-2 email-status ${statusColor(mostRecentEmail.status)}`">{{ mostRecentEmail.status.name }}</p>
-                    <p>On <time>{{ mostRecentEmail.created_at | formatDate }}</time> <strong class="font-bold"> {{ mostRecentEmail.message }}</strong></p>
+                    <p v-bind:class="`mb-2 email-status ${statusColor(mostRecentEmail.current_status)}`">{{ mostRecentEmail.current_status.name }}</p>
+                    <p>On <time>{{ mostRecentEmail.created_at | formatDate }}</time> <strong class="font-bold"> {{ mostRecentEmail.current_status.message }}</strong></p>
                 </div>
             </div>
         </div>
@@ -63,7 +63,7 @@ export default {
         },
         mostRecentEmail() {
             if(this.emails && this.emails.length) {
-                return this.emails[0].status;
+                return this.emails[0];
             }
         }
     }

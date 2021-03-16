@@ -20,6 +20,6 @@ abstract class TestCase extends BaseTestCase
             'Accept' => 'application/json',
             'X-Requested-With' => 'XMLHttpRequest'
         ]);
-        $this->withoutExceptionHandling();
+//        $this->withoutExceptionHandling();
     }
 }

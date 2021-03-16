@@ -6,7 +6,7 @@
 
     <h1>Email activity</h1>
     <div class="flex">
-        <div v-if="email" class="shadow-md rounded bg-white flex flex-col p-8 items-start mb-8 md:w-4/5 2xl:w-3/5">
+        <div v-if="email" class="shadow-md rounded bg-white flex flex-col p-8 items-start mb-8 md:w-3/5 2xl:w-3/5">
             <table>
                 <colgroup>
                     <col style="width: 20%;">
@@ -52,7 +52,7 @@
                     </ul>
                     <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6">
                         <div class="px-4 py-5 flex-auto">
-                            <div class="tab-content tab-space max-h-96 overflow-scroll">
+                            <div class="tab-content tab-space max-h-96 overflow-x-hidden overflow-y-auto">
                                 <div v-bind:class="{'hidden': openTab !== 1, 'block': openTab === 1}">
                                     {{email.message.text_content}}
                                 </div>
@@ -64,20 +64,20 @@
                 </div>
             </div>
         </div>
-        <div class="ml-10">
+        <div class="ml-28">
             <h5 class="text-black text-base font-bold">Latest events</h5>
 
             <ol v-if="email" class="timeline">
                 <li class="timeline-step" v-for="status in email.statuses">
                     <span class="timeline-icon"></span>
                     <time class="timeline-step-time text-xs">
-                        11:19:19
+                        {{ status.created_at | formatDate }}
                     </time>
                     <div class="timeline-step-label">
                         <span v-bind:class="`email-status text-left success ${statusColor(status)}`">
                             {{ status.name }}
                         </span>
-                        <span class="mt-3 text-left"> {{status.message}}</span>
+                        <span class="email-status-message mt-3 text-left"> {{status.message}}</span>
                     </div>
                 </li>
             </ol>

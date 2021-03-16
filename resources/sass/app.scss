@@ -70,6 +70,12 @@ html, body {
 .email-status {
     @apply rounded bg-gray-200 mr-2 px-4 py-1 inline-block uppercase font-bold text-xs;
 }
+.email-status-message {
+    max-height: 120px;
+    overflow-x: hidden;
+    overflow-y:auto;
+}
+
 .default-status {
     @apply bg-gray-100 text-gray-700;
 }
@@ -134,7 +140,7 @@ html, body {
     text-align: center;
     position: relative;
     left: -20%;
-    height: 120px;
+    height: 170px;
     display: flex;
     align-items: flex-start;
     justify-content: center;
@@ -169,7 +175,7 @@ html, body {
 }
 .timeline-step-time {
     position: absolute;
-    left: 20%;
+    left: -20%;
 }
 .timeline-step-label {
     position: absolute;
