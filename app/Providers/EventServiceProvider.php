@@ -19,9 +19,9 @@ class EventServiceProvider extends ServiceProvider
         NewEmailPosted::class => [
             SendUserEmail::class,
         ],
-//        EmailResend::class => [
-//          SendUserEmail::class
-//        ],
+        EmailResend::class => [
+          SendUserEmail::class
+        ],
         'Illuminate\Mail\Events\MessageSending' => [
             'App\Listeners\LogSendingMessage',
         ],

@@ -93,6 +93,9 @@ class EmailController extends Controller
      */
     public function resend(Email $email)
     {
+        $email->should_fail = false;
+        $email->save();
+        $email->setReposted();
         event(New EmailResend($email));
         return response()->json($email);
     }

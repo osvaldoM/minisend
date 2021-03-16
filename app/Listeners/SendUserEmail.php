@@ -26,7 +26,7 @@ class SendUserEmail
      * @param  object  $event
      * @return void
      */
-    public function handle(NewEmailPosted $event)
+    public function handle($event)
     {
         try {
             if($event->email->should_fail){

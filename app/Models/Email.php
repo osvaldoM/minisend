@@ -12,6 +12,7 @@ class Email extends Model
     public static $STATUS_SENT = 'Sent';
     public static $STATUS_FAILED = 'Failed';
     public static $STATUS_POSTED = 'Posted';
+    public static $STATUS_REPOSTED = 'Reposted';
 
     use HasFactory;
     use Paginatable;
@@ -29,6 +30,14 @@ class Email extends Model
     {
         $this->statuses()->create([
           'name' => self::$STATUS_POSTED,
+          'message' => $message
+        ]
+        );
+    }
+    public function setReposted($message='Email is queued again for sending')
+    {
+        $this->statuses()->create([
+          'name' => self::$STATUS_REPOSTED,
           'message' => $message
         ]
         );
@@ -53,12 +62,17 @@ class Email extends Model
 
     public function statuses()
     {
-        return $this->hasMany(Status::class)->orderBy('created_at', 'DESC');
+        return $this->hasMany(Status::class)
+            ->orderBy('created_at', 'DESC')
+            ->orderBy('name', 'ASC'); //hack to sort statuses that are created at the same millisecond
     }
 
     public function current_status()
     {
-        return $this->hasOne(Status::class)->orderBy('created_at', 'DESC')->latest();
+        return $this->hasOne(Status::class)
+            ->orderBy('created_at', 'DESC')
+            ->orderBy('name', 'ASC')
+            ->latest();
     }
 
     public function message()

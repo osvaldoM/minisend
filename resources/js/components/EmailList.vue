@@ -33,9 +33,6 @@
                     <router-link :to="{name: 'emailDetails', params: {'id': email.id}}" title="Details">
                         <svg-icon icon="eye"></svg-icon>
                     </router-link>
-                    <router-link to="/" title="Retry" v-if="email.current_status.name === 'Failed'">
-                        <svg-icon icon="refresh" class="ml-3"></svg-icon>
-                    </router-link>
                 </td>
             </tr>
         </table>
@@ -71,7 +68,10 @@ import { statusColor } from '../Util';
 import SvgIcon from './base_components/SvgIcon';
 
 export default {
-  props: {
+    components: {
+        SvgIcon,
+    },
+    props: {
     sharedStore: {
       type: Object,
       default: null,
@@ -88,8 +88,12 @@ export default {
       required: false,
     },
   },
-  components: {
-    SvgIcon,
+  data() {
+    return {
+      privateState: {
+      },
+      sharedState: this.sharedStore.state,
+    };
   },
   created() {
     this.sharedStore.loadEmails().catch((error) => {
@@ -98,14 +102,6 @@ export default {
         entity: 'emails',
       });
     });
-  },
-  data() {
-    return {
-      privateState: {
-
-      },
-      sharedState: this.sharedStore.state,
-    };
   },
   methods: {
     async changePage(event) {

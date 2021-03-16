@@ -24,4 +24,5 @@ Route::group(['prefix' => 'v1'], function () {
     Route::resource('message', MessageController::class);
     Route::resource('email', EmailController::class);
     Route::get('emails/to/{recipient}', [EmailController::class, 'get_recipient_emails'])->name('emailsToRecipient');
+    Route::post('emails/{email}/resend', [EmailController::class, 'resend'])->name('email.resend');
 });

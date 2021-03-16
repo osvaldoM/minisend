@@ -26,9 +26,10 @@
                     <input name="should_fail" type="checkbox">
                 </label>
                 <div class="flex justify-end">
-                    <save-button :loading="isSavingEmail" class="rounded-lg bg-blue-700 flex items-center text-white font-bold py-4 px-8">
-                        <span slot="text">
+                    <save-button :loading="isSavingEmail" class="rounded-lg bg-blue-700 text-white font-bold py-4 px-8">
+                        <span slot="main-content" class="flex items-center">
                             Send
+                            <svg-icon class="mr-2" icon="chevron-right"></svg-icon>
                         </span>
                     </save-button>
                 </div>
@@ -42,12 +43,13 @@ import axios from 'axios';
 import Modal from './base_components/Modal';
 import ValidationErrors from './base_components/ValidationErrors';
 import SaveButton from './base_components/SaveButton';
-
+import SvgIcon from "./base_components/SvgIcon";
 export default {
   components: {
     SaveButton,
     Modal,
     ValidationErrors,
+      SvgIcon
   },
   props: {
     isModalVisible: {

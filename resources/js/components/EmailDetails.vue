@@ -30,10 +30,18 @@
                 </tr>
                 <tr>
                     <td class="py-4"> Status</td>
-                    <td class="py-4">
+                    <td class="py-4 flex items-center">
                         <span v-bind:class="`email-status ${statusColor(email.current_status)}`">
                         {{ email.current_status.name }}
                         </span>
+                        <span v-if="email.current_status.name === 'Failed'">
+                        <save-button class="resend-email-btn text-white" :loading="isSavingEmail" v-on:click.native="retrySendingEmail($event, email.id)">
+                            <span slot="main-content" class="flex items-center text-white font-bold">
+                                <svg-icon  icon="refresh" class="mr-3"></svg-icon>
+                                Resend
+                            </span>
+                        </save-button>
+                    </span>
                     </td>
                 </tr>
             </table>
@@ -94,26 +102,24 @@
 import SvgIcon from './base_components/SvgIcon';
 import axios from '../HTTP';
 import { statusColor } from '../Util';
+import SaveButton from './base_components/SaveButton';
 
 export default {
   components: {
     SvgIcon,
+    SaveButton,
   },
   data() {
     return {
       privateState: {
         email: null,
         openTab: 1,
+        savingEmail: false,
       },
     };
   },
   created() {
-    this.loadEmail(this.$route.params.id).then((resp) => this.setEmail(resp.data)).catch((error) => {
-      this.$toasted.global.load_error({
-        message: (error.response ? error.response.data.message : error.message),
-        entity: 'email',
-      });
-    });
+    this.loadEmail(this.$route.params.id);
   },
   computed: {
     email() {
@@ -127,15 +133,44 @@ export default {
         this.privateState.openTab = value;
       },
     },
+    isSavingEmail: {
+      get() {
+        return this.privateState.savingEmail;
+      },
+      set(val) {
+        this.privateState.savingEmail = val;
+      },
+    },
   },
   methods: {
+    retrySendingEmail(event, id) {
+      this.isSavingEmail = true;
+      axios.post(window.route('email.resend', { email: id })).then(() => {
+        this.$toasted.success('Email reposted for sending');
+        this.loadEmail(id);
+      }).catch((error) => {
+        if (error.response.status === 422) {
+          this.privateState.validationErrors = error.response.data.errors;
+        }
+        this.$toasted.global.save_error({
+          message: (error.response ? error.response.data.message : error.message),
+        });
+      }).finally(() => {
+        this.isSavingEmail = false;
+      });
+    },
     setEmail(email) {
       this.privateState.email = email;
     },
     async loadEmail(id) {
       return axios.get(window.route('email.show', {
         email: id,
-      }));
+      })).then((resp) => this.setEmail(resp.data)).catch((error) => {
+        this.$toasted.global.load_error({
+          message: (error.response ? error.response.data.message : error.message),
+          entity: 'email',
+        });
+      });
     },
     toggleTabs(tabNumber) {
       this.privateState.openTab = tabNumber;
@@ -144,7 +179,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-
-</style>
