@@ -7,8 +7,6 @@ use App\Models\Attachment;
 use App\Models\Email;
 use App\Models\Message;
 use App\Models\Status;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
@@ -168,5 +166,33 @@ class EmailTest extends TestCase
         $this->assertDatabaseHas('messages', $fake_message->toArray());
 
         Storage::disk()->assertExists(config('uploads.attachments_folder_path').$file_name);
+    }
+    public function testFailCreatingInvalidEmail()
+    {
+
+        $fake_email = Email::factory()->make();
+        $fake_message = Message::factory()->make();
+        $fake_message->text_content = '';
+
+        $fake_email->message = $fake_message->toArray();
+
+        $file_to_upload_with_ok_size = UploadedFile::fake()->image('testimage.png')->size(2000);
+        $file_to_upload_with_large_size = UploadedFile::fake()->image('testimage.png')->size(9000);
+
+        $response = $this->json(
+            'POST',
+            route('email.store'), array_merge($fake_message->toArray(), [
+                'attachments' => [
+                    0 => $file_to_upload_with_ok_size,
+                    1 => $file_to_upload_with_large_size
+                ]
+            ])
+        );
+
+        $response
+            ->dump()
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(["text_content", 'attachments.1']);
+
     }
 }
