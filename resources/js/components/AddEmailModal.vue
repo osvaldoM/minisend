@@ -1,10 +1,13 @@
 <template>
 
-    <modal :isModalVisible="isModalVisible" @close="$emit('close')" v-bind:on-mounted="addEventListeners">
+    <modal :isModalVisible="isModalVisible" @close="$emit('close')">
         <section slot="body" class="">
             <h1>Send email</h1>
 
             <form v-on:submit="sendEmail" class="">
+                <validation-errors :errors="privateState.validationErrors" v-if="privateState.validationErrors">
+
+                </validation-errors>
                 <input required type="email" name="from" placeholder="From address" class="w-full rounded-lg bg-gray-200 px-4 py-2 mb-2" />
                 <input required type="email" name="to" placeholder="To address" class="w-full rounded-lg bg-gray-200 px-4 py-2 mb-2" />
                 <input required type="text" name="subject" placeholder="Subject" class="w-full rounded-lg bg-gray-200 px-4 py-2 mb-2" />
@@ -35,11 +38,13 @@
 import Modal from "./base_components/Modal";
 import SvgIcon from "./base_components/SvgIcon";
 import axios from "axios";
+import ValidationErrors from "./base_components/ValidationErrors";
 
 export default {
     components: {
         Modal,
-        SvgIcon
+        SvgIcon,
+        ValidationErrors
     },
     props: {
         isModalVisible: {
@@ -51,7 +56,7 @@ export default {
     data() {
         return {
             privateState: {
-
+                validationErrors: null
             }
         }
     },
@@ -65,12 +70,11 @@ export default {
             axios.post(window.route('email.store'), formData).then( res => {
                 console.log(res.id);
                 this.$router.push({name: 'emailDetails', params: {id: res.data.id}});
-            }).catch( err => {
-
+            }).catch( error => {
+                if (error.response.status == 422){
+                    this.privateState.validationErrors = error.response.data.errors;
+                }
             })
-        },
-        addEventListeners() {
-
         },
     },
     computed: {

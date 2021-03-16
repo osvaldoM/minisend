@@ -107,7 +107,7 @@ class StoreEmailRequest extends FormRequest
     {
         return [
             'subject.max' => 'Use some common sense! Your subject cannot be the size of an email :(',
-//            'attachments.*.mimes' => 'Only Images, documents, audios and videos are allowed.',
+            'attachments.*.mimes' => 'Only Images, documents, audios and videos are allowed.',
             'attachments.*.max' => 'Max upload size(5MB) exceeded.'
         ];
     }
