@@ -2,7 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Events\EmailResend;
+use App\Events\NewEmailPosted;
 use App\Helpers\Helper;
+use App\Listeners\SendUserEmail;
 use App\Models\Attachment;
 use App\Models\Email;
 use App\Models\Message;
@@ -42,7 +45,7 @@ class EmailTest extends TestCase
             'message' => 'Email is queued for sending'
         ]))->create()->each(function ($email) use ($sentStatus, $failedStatus) {
             $email->message()->save(Message::factory()->make());
-            $email->message->attachments()->saveMany(Attachment::factory()->count(rand(0,2))->make());
+            $email->message->attachments()->saveMany(Attachment::factory()->count(rand(0, 2))->make());
             $email->statuses()->create(
                 Arr::random([$sentStatus->toArray(), $failedStatus->toArray()])
             );
@@ -56,14 +59,14 @@ class EmailTest extends TestCase
         $per_page = 5;
         $current_page = 2;
 
-        $response = $this->get(route('email.index', ['page' =>$current_page, 'per_page' => $per_page]));
+        $response = $this->get(route('email.index', ['page' => $current_page, 'per_page' => $per_page]));
 
         $response
             ->assertStatus(200)
             ->assertJsonPath('per_page', $per_page)
             ->assertJsonPath('current_page', $current_page);
 
-        $this->assertEqualsCanonicalizing($response['data'], array_slice($this->emails->toArray(),(($current_page-1) * $per_page),$per_page));
+        $this->assertEqualsCanonicalizing($response['data'], array_slice($this->emails->toArray(), (($current_page - 1) * $per_page), $per_page));
     }
 
     public function testListPaginatedEmailsWithSenderSearch()
@@ -141,6 +144,9 @@ class EmailTest extends TestCase
     public function testCreateEmail()
     {
 
+        $listener = \Mockery::spy(NewEmailPosted::class);
+        $this->app->instance(SendUserEmail::class, $listener);
+
         $fake_email = Email::factory()->make();
         $fake_message = Message::factory()->make();
         $fake_message->html_content = Helper::removeUnwantedTags($fake_message->html_content);
@@ -164,9 +170,16 @@ class EmailTest extends TestCase
             ->assertStatus(201)
             ->assertJson($fake_email->toArray());
         $this->assertDatabaseHas('messages', $fake_message->toArray());
-
-        Storage::disk()->assertExists(config('uploads.attachments_folder_path').$file_name);
+        Storage::disk()->assertExists(config('uploads.attachments_folder_path') . $file_name);
+        $listener->shouldHaveReceived('handle')->with(\Mockery::on(function ($event) use ($fake_email) {
+            return $fake_email->message['subject'] == $event->email->message->subject
+                && $fake_email->message['to'] == $event->email->message->to
+                && $fake_email->message['from'] == $event->email->message->from
+                && $fake_email->message['text_content'] == $event->email->message->text_content
+                && $fake_email->message['html_content'] == $event->email->message->html_content;
+        }));
     }
+
     public function testFailCreatingInvalidEmail()
     {
 
@@ -190,9 +203,32 @@ class EmailTest extends TestCase
         );
 
         $response
-            ->dump()
             ->assertStatus(422)
             ->assertJsonValidationErrors(["text_content", 'attachments.1']);
 
+    }
+
+    public function testReSendEmail()
+    {
+        $listener = \Mockery::spy(EmailResend::class);
+        $this->app->instance(SendUserEmail::class, $listener);
+
+        $failed_email = Email::factory()->has(Status::factory()->state([
+            'name' => 'Failed',
+            'message' => 'Email failed'
+        ]))->create();
+
+        $response = $this->json(
+            'POST',
+            route('email.resend', ['email' => $failed_email->id])
+        );
+
+        $response->dump()
+            ->assertStatus(200)
+            ->assertJson($failed_email->toArray());
+
+        $listener->shouldHaveReceived('handle')->with(\Mockery::on(function ($event) use ($failed_email) {
+            return $failed_email->id == $event->email->id;
+        }));
     }
 }
