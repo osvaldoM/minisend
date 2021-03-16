@@ -27,6 +27,11 @@ class EmailController extends Controller
 
         $emails_query = Email::with(['message', 'message.attachments', 'statuses','current_status'])->orderBy('created_at', 'DESC');
 
+        /*
+         * I could have used fulltext search here, but I will not for the sake of simplicity, since laravel has no native support for fulltext search
+         *  I would have to make assumptions on the db server being used(whether its mysql, pgsql, sqlite, etc)
+         *
+         */
         if($search_query) {
             $emails_query = $emails_query->whereLike(['message.from', 'message.to', 'message.subject'], $search_query);
         }

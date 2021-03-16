@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Schema\Grammars\MySqlGrammar;
+use Illuminate\Support\Fluent;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
@@ -45,6 +48,21 @@ class MacrosServiceProvider extends ServiceProvider
             });
 
             return $this;
+        });
+
+        Blueprint::macro('fulltext', function ($columns, $name = null, $algorithm = null)
+        {
+            return $this->indexCommand('fulltext', $columns, $name, $algorithm);
+        });
+
+        Blueprint::macro('dropFulltext', function ($index)
+        {
+            return $this->dropIndexCommand('dropIndex', 'fulltext', $index);
+        });
+
+        MySqlGrammar::macro('compileFulltext', function (Blueprint $blueprint, Fluent $command)
+        {
+            return $this->compileKey($blueprint, $command, 'fulltext');
         });
     }
 }
