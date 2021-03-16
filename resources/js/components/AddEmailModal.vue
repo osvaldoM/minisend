@@ -24,10 +24,11 @@
                     <input name="should_fail" type="checkbox">
                 </label>
                 <div class="flex justify-end">
-                    <button class="rounded-lg bg-blue-700 flex items-center text-white font-bold py-4 px-8" type="submit">
-                        Send
-                        <svg-icon class="mr-2" icon="chevron-right"></svg-icon>
-                    </button>
+                    <save-button :loading="isSavingEmail" class="rounded-lg bg-blue-700 flex items-center text-white font-bold py-4 px-8">
+                        <span slot="text">
+                            Send
+                        </span>
+                    </save-button>
                 </div>
             </form>
         </section>
@@ -39,9 +40,11 @@ import Modal from "./base_components/Modal";
 import SvgIcon from "./base_components/SvgIcon";
 import axios from "axios";
 import ValidationErrors from "./base_components/ValidationErrors";
+import SaveButton from "./base_components/SaveButton";
 
 export default {
     components: {
+        SaveButton,
         Modal,
         SvgIcon,
         ValidationErrors
@@ -56,7 +59,8 @@ export default {
     data() {
         return {
             privateState: {
-                validationErrors: null
+                validationErrors: null,
+                savingEmail: false
             }
         }
     },
@@ -67,6 +71,7 @@ export default {
             const $form = event.target
             const formData = new FormData($form);
 
+            this.isSavingEmail = true;
             axios.post(window.route('email.store'), formData).then( res => {
                 this.$toasted.global.save_success({entity: 'Email'});
                 this.$router.push({name: 'emailDetails', params: {id: res.data.id}});
@@ -77,10 +82,20 @@ export default {
                 this.$toasted.global.save_error({
                     message: (error.response ? error.response.data.message : error.message)
                 });
-            })
+            }).finally(() => {
+                this.isSavingEmail = false;
+            });
         },
     },
     computed: {
+        isSavingEmail: {
+            get() {
+                return this.privateState.savingEmail;
+            },
+            set(val) {
+                this.privateState.savingEmail = val;
+            }
+        }
     },
 }
 </script>
