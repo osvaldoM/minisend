@@ -90,7 +90,12 @@ export default {
         SvgIcon,
     },
     created(){
-        this.sharedStore.loadEmails();
+        this.sharedStore.loadEmails().catch(error => {
+            this.$toasted.global.load_error({
+                message: (error.response ? error.response.data.message : error.message),
+                entity: 'emails'
+            });
+        });
     },
     data(){
         return {
@@ -106,7 +111,12 @@ export default {
             if(!url){
                 return;
             }
-            this.sharedStore.loadEmails(url)
+            this.sharedStore.loadEmails(url).catch(error => {
+                this.$toasted.global.load_error({
+                    message: (error.response ? error.response.data.message : error.message),
+                    entity: 'emails'
+                });
+            });
         },
         statusColor
     },
@@ -128,7 +138,12 @@ export default {
     },
     watch: {
         perPage(per_page){
-            this.sharedStore.loadEmails();
+            this.sharedStore.loadEmails().catch(error => {
+                this.$toasted.global.load_error({
+                    message: (error.response ? error.response.data.message : error.message),
+                    entity: 'emails'
+                });
+            });
         },
     }
 }

@@ -68,12 +68,15 @@ export default {
             const formData = new FormData($form);
 
             axios.post(window.route('email.store'), formData).then( res => {
-                console.log(res.id);
+                this.$toasted.global.save_success({entity: 'Email'});
                 this.$router.push({name: 'emailDetails', params: {id: res.data.id}});
             }).catch( error => {
                 if (error.response.status == 422){
                     this.privateState.validationErrors = error.response.data.errors;
                 }
+                this.$toasted.global.save_error({
+                    message: (error.response ? error.response.data.message : error.message)
+                });
             })
         },
     },

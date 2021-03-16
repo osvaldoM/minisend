@@ -126,7 +126,12 @@ export default {
         async loadEmail(id){
             return await axios.get( window.route('email.show', {
                 'email': id
-            })).then(resp => this.setEmail(resp.data));
+            })).then(resp => this.setEmail(resp.data)).catch(error => {
+                this.$toasted.global.load_error({
+                    message: (error.response ? error.response.data.message : error.message),
+                    entity: 'email'
+                });
+            });
         },
         toggleTabs: function(tabNumber){
             this.privateState.openTab = tabNumber
