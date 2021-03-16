@@ -11,7 +11,9 @@ class Store {
         this.id = id || generateStoreId();
         this.debug = true;
         this.state = {
-            paginatedEmails: {},
+            paginatedEmails: {
+                per_page: 10
+            },
             search: '',
             recipient: ''
         };
