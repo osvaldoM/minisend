@@ -1,45 +1,46 @@
-import Vue from "vue";
-import VueRouter from 'vue-router'
-import Toasted from "vue-toasted";
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import Toasted from 'vue-toasted';
 
+require('./register-filters');
 
 Vue.use(VueRouter);
 Vue.use(Toasted, {
-    router: VueRouter
+  router: VueRouter,
 });
 
 Vue.toasted.register('save_error', (payload) => {
-    if(payload.message){
-        return payload.message;
-    }
-    if(payload.entity){
-        return `error saving ${payload.entity}`;
-    }
-    return 'Oops.. Something Went Wrong..';
+  if (payload.message) {
+    return payload.message;
+  }
+  if (payload.entity) {
+    return `error saving ${payload.entity}`;
+  }
+  return 'Oops.. Something Went Wrong..';
 }, {
-    type: 'error',
-    duration: 8000
+  type: 'error',
+  duration: 8000,
 });
 
 Vue.toasted.register('load_error', (payload) => {
-    if(payload.message){
-        return payload.message;
-    }
-    if(payload.entity){
-        return `error loading ${payload.entity}`;
-    }
-    return 'Oops.. Something Went Wrong..';
+  if (payload.message) {
+    return payload.message;
+  }
+  if (payload.entity) {
+    return `error loading ${payload.entity}`;
+  }
+  return 'Oops.. Something Went Wrong..';
 }, {
-    type: 'error',
-    duration: 8000
+  type: 'error',
+  duration: 8000,
 });
 
 Vue.toasted.register('save_success', (payload) => {
-    if(payload.entity){
-        return `${payload.entity} created`;
-    }
-    return 'Saved !';
+  if (payload.entity) {
+    return `${payload.entity} created`;
+  }
+  return 'Saved !';
 }, {
-    type: 'success',
-    duration: 8000
+  type: 'success',
+  duration: 8000,
 });

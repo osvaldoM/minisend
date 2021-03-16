@@ -11,9 +11,11 @@
                 <input required type="email" name="from" placeholder="From address" class="w-full rounded-lg bg-gray-200 px-4 py-2 mb-2" />
                 <input required type="email" name="to" placeholder="To address" class="w-full rounded-lg bg-gray-200 px-4 py-2 mb-2" />
                 <input required type="text" name="subject" placeholder="Subject" class="w-full rounded-lg bg-gray-200 px-4 py-2 mb-2" />
-                <textarea required name="html_content" placeholder="Html message" class="w-full rounded-lg bg-gray-200 px-4 py-2 mb-2" cols="5" rows="6">
+                <textarea required name="html_content"
+                          placeholder="Html message" class="w-full rounded-lg bg-gray-200 px-4 py-2 mb-2" cols="5" rows="6">
                 </textarea>
-                <textarea required name="text_content" placeholder="Text message" class="w-full rounded-lg bg-gray-200 px-4 py-2 mb-2" cols="5" rows="6">
+                <textarea required name="text_content"
+                          placeholder="Text message" class="w-full rounded-lg bg-gray-200 px-4 py-2 mb-2" cols="5" rows="6">
                 </textarea>
                 <label class="block mb-2">
                     Attachments
@@ -36,68 +38,66 @@
 </template>
 
 <script>
-import Modal from "./base_components/Modal";
-import SvgIcon from "./base_components/SvgIcon";
-import axios from "axios";
-import ValidationErrors from "./base_components/ValidationErrors";
-import SaveButton from "./base_components/SaveButton";
+import axios from 'axios';
+import Modal from './base_components/Modal';
+import ValidationErrors from './base_components/ValidationErrors';
+import SaveButton from './base_components/SaveButton';
 
 export default {
-    components: {
-        SaveButton,
-        Modal,
-        SvgIcon,
-        ValidationErrors
+  components: {
+    SaveButton,
+    Modal,
+    ValidationErrors,
+  },
+  props: {
+    isModalVisible: {
+      type: Boolean,
+      default: false,
+      required: true,
     },
-    props: {
-        isModalVisible: {
-            type: Boolean,
-            default: false,
-            required: true
-        }
-    },
-    data() {
-        return {
-            privateState: {
-                validationErrors: null,
-                savingEmail: false
-            }
-        }
-    },
-    methods: {
-        sendEmail(event) {
-            event.preventDefault();
+  },
+  data() {
+    return {
+      privateState: {
+        validationErrors: null,
+        savingEmail: false,
+      },
+    };
+  },
+  methods: {
+    sendEmail(event) {
+      event.preventDefault();
 
-            const $form = event.target
-            const formData = new FormData($form);
+      const $form = event.target;
+      const formData = new FormData($form);
 
-            this.isSavingEmail = true;
-            axios.post(window.route('email.store'), formData).then( res => {
-                this.$toasted.global.save_success({entity: 'Email'});
-                this.$router.push({name: 'emailDetails', params: {id: res.data.id}});
-            }).catch( error => {
-                if (error.response.status == 422){
-                    this.privateState.validationErrors = error.response.data.errors;
-                }
-                this.$toasted.global.save_error({
-                    message: (error.response ? error.response.data.message : error.message)
-                });
-            }).finally(() => {
-                this.isSavingEmail = false;
-            });
-        },
-    },
-    computed: {
-        isSavingEmail: {
-            get() {
-                return this.privateState.savingEmail;
-            },
-            set(val) {
-                this.privateState.savingEmail = val;
-            }
+      this.isSavingEmail = true;
+      axios.post(window.route('email.store'), formData).then((res) => {
+        this.$toasted.global.save_success({ entity: 'Email' });
+        this.$router.push({ name: 'emailDetails', params: { id: res.data.id } });
+      }).catch((error) => {
+        if (error.response.status === 422) {
+          this.privateState.validationErrors = error.response.data.errors;
         }
+        this.$toasted.global.save_error({
+          message: (error.response ? error.response.data.message : error.message),
+        });
+      }).finally(() => {
+        this.isSavingEmail = false;
+      });
     },
-}
+  },
+  computed: {
+    isSavingEmail: {
+      get() {
+        return this.privateState.savingEmail;
+      },
+      set(val) {
+        this.privateState.savingEmail = val;
+      },
+    },
+  },
+};
 </script>
 
 <style scoped>

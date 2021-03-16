@@ -1,19 +1,16 @@
 const statusColor = (status) => {
-    switch (status.name) {
-        case 'Sent':
-            return 'success-status';
-            break;
+  switch (status.name) {
+    case 'Sent':
+      return 'success-status';
 
-        case 'Failed':
-            return 'failed-status';
-            break;
+    case 'Failed':
+      return 'failed-status';
 
-        default:
-            return 'default-status';
-    }
-}
-
+    default:
+      return 'default-status';
+  }
+};
 
 export {
-    statusColor
-}
+  statusColor,
+};

@@ -14,27 +14,27 @@
 
 <script>
 export default {
-    data() {
-        return {
-        }
+  data() {
+    return {
+    };
+  },
+  props: {
+    height: {
+      type: String,
+      default: '1.5em',
     },
-    props: {
-        height:{
-            type: String,
-            default:'1.5em'
-        },
-        width:{
-            type: String,
-            default:'1.5em'
-        },
-        icon: {
-            type: String
-        }
+    width: {
+      type: String,
+      default: '1.5em',
     },
-    mounted() {
-        this.$el.firstChild.classList.add(this.$style.svg)
-        this.$el.firstChild.setAttribute('height', this.height)
-        this.$el.firstChild.setAttribute('width', this.height)
-    }
-}
+    icon: {
+      type: String,
+    },
+  },
+  mounted() {
+    this.$el.firstChild.classList.add(this.$style.svg);
+    this.$el.firstChild.setAttribute('height', this.height);
+    this.$el.firstChild.setAttribute('width', this.height);
+  },
+};
 </script>

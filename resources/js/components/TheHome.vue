@@ -19,58 +19,58 @@
 
 <script>
 
-import SvgIcon from "./base_components/SvgIcon";
+import SvgIcon from './base_components/SvgIcon';
 
-import EmailsList from "./EmailList";
-import SearchForm from "./SearchForm";
-import {createStore} from "../store";
-import AddEmailModal from "./AddEmailModal";
+import EmailsList from './EmailList';
+import SearchForm from './SearchForm';
+import { createStore } from '../store';
+import AddEmailModal from './AddEmailModal';
 
 const store = createStore();
 
 export default {
-    components: {
-        SearchForm,
-        EmailsList,
-        SvgIcon,
-        AddEmailModal
+  components: {
+    SearchForm,
+    EmailsList,
+    SvgIcon,
+    AddEmailModal,
+  },
+  created() {
+  },
+  mounted() {
+  },
+  data() {
+    return {
+      store,
+      privateState: {
+        isAddEmailModalVisible: false,
+      },
+      sharedState: store.state,
+    };
+  },
+  methods: {
+    openAddEmailModal() {
+      this.isAddEmailModalVisible = true;
     },
-    created(){
+    hideAddEmailModal() {
+      this.isAddEmailModalVisible = false;
     },
-    mounted(){
+  },
+  computed: {
+    emails() {
+      return this.sharedState.paginatedEmails.data;
     },
-    data(){
-        return {
-            store:store,
-            privateState: {
-                isAddEmailModalVisible: false
-            },
-            sharedState: store.state
-        }
+    isAddEmailModalVisible: {
+      get() {
+        return this.privateState.isAddEmailModalVisible;
+      },
+      set(value) {
+        this.privateState.isAddEmailModalVisible = value;
+      },
     },
-    methods: {
-        openAddEmailModal(event){
-            this.isAddEmailModalVisible = true;
-        },
-        hideAddEmailModal() {
-            this.isAddEmailModalVisible = false;
-        }
-    },
-    computed: {
-        emails(){
-            return this.sharedState.paginatedEmails.data;
-        },
-        isAddEmailModalVisible: {
-            get(){
-                return this.privateState.isAddEmailModalVisible;
-            },
-            set(value){
-                this.privateState.isAddEmailModalVisible = value;
-            }
-        }
-    },
-    watch: {
+  },
+  watch: {
 
-    }
-}
+  },
+};
 </script>

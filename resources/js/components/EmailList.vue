@@ -11,7 +11,7 @@
                 <td class="font-bold uppercase text-xs emails-table-column">Actions</td>
             </tr>
             </thead>
-            <tr class="mx-auto shadow bg-white my-4 px-2 border-b" v-for="email in emails">
+            <tr class="mx-auto shadow bg-white my-4 px-2 border-b" v-for="email in emails" v-bind:key="email.id">
                 <td class="emails-table-column text-black">
                     <span v-bind:class="`email-status ${statusColor(email.current_status)}`">
                         {{ email.current_status.name }}
@@ -19,7 +19,9 @@
                 </td>
                 <td class="emails-table-column text-black">{{ email.message.from }}</td>
                 <td v-if="showRecipient" class="emails-table-column text-black">
-                    <router-link class="underline" :to="{ name: 'emailsTo', params: { recipient: email.message.to }}">{{ email.message.to }}</router-link>
+                    <router-link class="underline" :to="{ name: 'emailsTo', params: { recipient: email.message.to }}">
+                        {{ email.message.to }}
+                    </router-link>
                 </td>
                 <td class="emails-table-column text-black">
                     {{ email.message.subject | truncate(40) }}
@@ -52,9 +54,9 @@
             <div class="flex justify-end items-center ml-4">
                 <span> {{ paginatedEmails.from }} - {{ paginatedEmails.to }} of {{ paginatedEmails.total }}</span>
                 <ul v-if="paginatedEmails && paginatedEmails.data" class="page-links flex ml-4">
-                    <li class="page-link-container" v-for="link in paginatedEmails.links">
-                        <button v-bind:disabled="!link.url || link.active" v-on:click="changePage"
-                                v-bind:class="`page-link ${link.active ? 'bg-blue-100' : ''}`" :data-url="link.url" v-html="link.label"></button>
+                    <li class="page-link-container" v-for="link in paginatedEmails.links" v-bind:key="link.label">
+                        <button v-bind:disabled="!link.url || link.active" v-on:click="changePage" v-html="link.label"
+                                v-bind:class="`page-link ${link.active ? 'bg-blue-100' : ''}`" :data-url="link.url" ></button>
                     </li>
                 </ul>
 
@@ -65,88 +67,88 @@
 </template>
 
 <script>
-import {statusColor} from "../Util";
-import SvgIcon from "./base_components/SvgIcon";
+import { statusColor } from '../Util';
+import SvgIcon from './base_components/SvgIcon';
 
 export default {
-    props: {
-        sharedStore: {
-            type: Object,
-            default: null,
-            required: true
-        },
-        recipient: {
-            type: String,
-            default: null,
-            required: false
-        },
-        showRecipient: {
-            type: Boolean,
-            default: true,
-            required: false
-        }
+  props: {
+    sharedStore: {
+      type: Object,
+      default: null,
+      required: true,
     },
-    components: {
-        SvgIcon,
+    recipient: {
+      type: String,
+      default: null,
+      required: false,
     },
-    created(){
-        this.sharedStore.loadEmails().catch(error => {
-            this.$toasted.global.load_error({
-                message: (error.response ? error.response.data.message : error.message),
-                entity: 'emails'
-            });
-        });
+    showRecipient: {
+      type: Boolean,
+      default: true,
+      required: false,
     },
-    data(){
-        return {
-            privateState: {
+  },
+  components: {
+    SvgIcon,
+  },
+  created() {
+    this.sharedStore.loadEmails().catch((error) => {
+      this.$toasted.global.load_error({
+        message: (error.response ? error.response.data.message : error.message),
+        entity: 'emails',
+      });
+    });
+  },
+  data() {
+    return {
+      privateState: {
 
-            },
-            sharedState: this.sharedStore.state
-        }
+      },
+      sharedState: this.sharedStore.state,
+    };
+  },
+  methods: {
+    async changePage(event) {
+      const url = event.target.getAttribute('data-url');
+      if (!url) {
+        return;
+      }
+      this.sharedStore.loadEmails(url).catch((error) => {
+        this.$toasted.global.load_error({
+          message: (error.response ? error.response.data.message : error.message),
+          entity: 'emails',
+        });
+      });
     },
-    methods: {
-        async changePage(event){
-            const url = event.target.getAttribute('data-url');
-            if(!url){
-                return;
-            }
-            this.sharedStore.loadEmails(url).catch(error => {
-                this.$toasted.global.load_error({
-                    message: (error.response ? error.response.data.message : error.message),
-                    entity: 'emails'
-                });
-            });
-        },
-        statusColor
+    statusColor,
+  },
+  computed: {
+    emails() {
+      return this.sharedState.paginatedEmails.data;
     },
-    computed: {
-        emails(){
-            return this.sharedState.paginatedEmails.data;
-        },
-        perPage: {
-            get() {
-                return this.sharedState.paginatedEmails.per_page;
-            },
-            set() {
-                this.sharedStore.setperPage();
-            }
-        },
-        paginatedEmails() {
-            return this.sharedState.paginatedEmails;
-        }
+    perPage: {
+      get() {
+        return this.sharedState.paginatedEmails.per_page;
+      },
+      set() {
+        this.sharedStore.setperPage();
+      },
     },
-    watch: {
-        perPage(per_page){
-            this.sharedStore.loadEmails().catch(error => {
-                this.$toasted.global.load_error({
-                    message: (error.response ? error.response.data.message : error.message),
-                    entity: 'emails'
-                });
-            });
-        },
-    }
-}
+    paginatedEmails() {
+      return this.sharedState.paginatedEmails;
+    },
+  },
+  watch: {
+    perPage() {
+      this.sharedStore.loadEmails().catch((error) => {
+        this.$toasted.global.load_error({
+          message: (error.response ? error.response.data.message : error.message),
+          entity: 'emails',
+        });
+      });
+    },
+  },
+};
 </script>
 
 <style scoped>

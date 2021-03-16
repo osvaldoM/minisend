@@ -12,14 +12,15 @@
 </template>
 
 <script>
-import AppFooter from "./TheFooter";
-import AppHeader from "./TheHeader";
+import AppFooter from './TheFooter';
+import AppHeader from './TheHeader';
+
 export default {
-    components: {
-        AppFooter,
-        AppHeader
-    }
-}
+  components: {
+    AppFooter,
+    AppHeader,
+  },
+};
 </script>
 
 <style scoped>

@@ -78,25 +78,12 @@
 
 <script>
 export default {
-    data() {
-        return {
-            // isModalVisible: false
-        }
+  props: {
+    isModalVisible: {
+      type: Boolean,
+      default: false,
+      required: true,
     },
-    props: {
-        onMounted: {
-            type: Function,
-            default: null,
-            required: false
-        },
-        isModalVisible: {
-            type: Boolean,
-            default: false,
-            required: true
-        }
-    },
-    mounted(){
-        this.onMounted && this.onMounted();
-    }
-}
+  },
+};
 </script>

@@ -8,45 +8,45 @@
 </template>
 
 <script>
-import SvgIcon from "./base_components/SvgIcon";
+import SvgIcon from './base_components/SvgIcon';
 
 export default {
-    props: {
-        sharedStore: {
-            type: Object,
-            default: null,
-            required: false
-        }
+  props: {
+    sharedStore: {
+      type: Object,
+      default: null,
+      required: false,
     },
-    components: {
-        SvgIcon,
-    },
-    data(){
-        return {
-            privateState: {
+  },
+  components: {
+    SvgIcon,
+  },
+  data() {
+    return {
+      privateState: {
 
-            },
-            sharedState: this.sharedStore.state
-        }
+      },
+      sharedState: this.sharedStore.state,
+    };
+  },
+  methods: {
+    async filterEmails(event) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      this.sharedStore.loadEmails();
     },
-    methods: {
-        async filterEmails(event){
-            event.preventDefault();
-            event.stopImmediatePropagation();
-            this.sharedStore.loadEmails();
-        }
+  },
+  computed: {
+    search: {
+      get() {
+        return this.sharedState.search;
+      },
+      set(search) {
+        this.sharedStore.setSearchAction(search);
+      },
     },
-    computed: {
-        search: {
-            get(){
-                return this.sharedState.search;
-            },
-            set(search){
-                this.sharedStore.setSearchAction(search);
-            }
-        }
-    }
-}
+  },
+};
 </script>
 
 <style scoped>

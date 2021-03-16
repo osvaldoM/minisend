@@ -12,7 +12,9 @@
                 <h2 class="font-bold text-black"> {{recipient}}</h2>
                 <div v-if="mostRecentEmail" class="">
                     <p v-bind:class="`mb-2 email-status ${statusColor(mostRecentEmail.current_status)}`">{{ mostRecentEmail.current_status.name }}</p>
-                    <p>On <time>{{ mostRecentEmail.created_at | formatDate }}</time> <strong class="font-bold"> {{ mostRecentEmail.current_status.message }}</strong></p>
+                    <p>On <time>{{ mostRecentEmail.created_at | formatDate }}</time>
+                        <strong class="font-bold">{{ mostRecentEmail.current_status.message }}</strong>
+                    </p>
                 </div>
             </div>
         </div>
@@ -25,52 +27,50 @@
 </template>
 
 <script>
-import EmailList from "./EmailList";
-import {createStore} from "../store";
-import SvgIcon from "./base_components/SvgIcon";
-import {statusColor} from "../Util";
-
+import EmailList from './EmailList';
+import { createStore } from '../store';
+import SvgIcon from './base_components/SvgIcon';
+import { statusColor } from '../Util';
 
 const store = createStore();
 
 export default {
-    components: {
-        EmailList,
-        SvgIcon
+  components: {
+    EmailList,
+    SvgIcon,
+  },
+  data() {
+    return {
+      privateState: {
+        emailsToRecipient: null,
+      },
+      sharedState: store.state,
+      store,
+    };
+  },
+  props: {},
+  async created() {
+    store.setRecipientAction(this.recipient);
+  },
+  methods: {
+    statusColor,
+  },
+  computed: {
+    recipient() {
+      return this.$route.params.recipient;
     },
-    data(){
-        return {
-            privateState: {
-                emailsToRecipient: null
-            },
-            sharedState: store.state,
-            store
-        }
+    emails() {
+      return this.sharedState.paginatedEmails.data;
     },
-    props: {},
-    async created(){
-        store.setRecipientAction(this.recipient);
+    mostRecentEmail() {
+      if (this.emails && this.emails.length) {
+        return this.emails[0];
+      }
     },
-    methods: {
-        statusColor
-    },
-    computed: {
-        recipient(){
-            return this.$route.params.recipient
-        },
-        emails(){
-            return this.sharedState.paginatedEmails.data;
-        },
-        mostRecentEmail() {
-            if(this.emails && this.emails.length) {
-                return this.emails[0];
-            }
-        }
-    }
-}
+  },
+};
 </script>
 
 <style scoped>
-
 
 </style>

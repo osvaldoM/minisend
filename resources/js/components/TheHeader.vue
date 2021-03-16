@@ -17,13 +17,13 @@
 
 <script>
 
-import SvgIcon from "./base_components/SvgIcon";
+import SvgIcon from './base_components/SvgIcon';
 
 export default {
-    components: {
-        SvgIcon
-    }
-}
+  components: {
+    SvgIcon,
+  },
+};
 </script>
 
 <style scoped>

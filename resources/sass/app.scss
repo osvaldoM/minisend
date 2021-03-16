@@ -123,7 +123,12 @@ html, body {
     @apply cursor-pointer -mb-px text-center relative z-10;
     top: 0;
 }
-
+.tab-header-link {
+    @apply text-xs font-bold uppercase px-5 py-3 rounded-t block leading-normal bg-white;
+}
+.active-tab-header-link {
+    @apply text-black border border-b-0;
+}
 //timeline
 .timeline {
     margin: 0 auto;
