@@ -49,6 +49,12 @@ Start the local development server
 
     php artisan serve --port=8000
 
+
+Running The Queue Worker for sending emails
+
+    php artisan queue:work
+
+
 You can now access the server at http://localhost:8000
 
 ## Login details
@@ -56,8 +62,6 @@ You can now access the server at http://localhost:8000
 API/User authentication is not required
 
 csrf token is not required
-
-## Database seeding
 
 # Testing API
 
