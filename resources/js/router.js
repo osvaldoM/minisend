@@ -4,6 +4,8 @@ import nprogress from 'nprogress';
 import Home from './components/TheHome';
 import EmailsToRecipient from './components/EmailsToRecipient';
 import EmailDetails from './components/EmailDetails';
+import PageNotFound from './components/PageNotFound';
+import Help from './components/Help';
 
 Vue.use(VueRouter);
 
@@ -32,6 +34,14 @@ const router = new VueRouter({
       name: 'emailDetails',
       component: EmailDetails,
       props: true,
+    },
+    {
+      path: '/help',
+      component: Help,
+    },
+    {
+      path: '*',
+      component: PageNotFound,
     },
   ],
 });

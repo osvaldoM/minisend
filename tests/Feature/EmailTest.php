@@ -208,7 +208,7 @@ class EmailTest extends TestCase
 
     }
 
-    public function testReSendEmail()
+    public function testResendEmail()
     {
         $listener = \Mockery::spy(EmailResend::class);
         $this->app->instance(SendUserEmail::class, $listener);
