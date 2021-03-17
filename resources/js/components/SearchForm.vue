@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import SvgIcon from './base_components/SvgIcon';
+import SvgIcon from './base_components/BaseSvgIcon';
 
 export default {
   props: {

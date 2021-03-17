@@ -1,11 +1,11 @@
 import VueRouter from 'vue-router';
 import Vue from 'vue';
 import nprogress from 'nprogress';
-import Home from './components/TheHome';
-import EmailsToRecipient from './components/EmailsToRecipient';
-import EmailDetails from './components/EmailDetails';
-import PageNotFound from './components/PageNotFound';
-import Help from './components/Help';
+import Home from './components/pages/HomePage';
+import EmailsToRecipient from './components/pages/EmailsToRecipientPage';
+import EmailDetails from './components/pages/EmailDetailsPage';
+import PageNotFound from './components/pages/PageNotFoundPage';
+import Help from './components/pages/HelpPage';
 
 Vue.use(VueRouter);
 

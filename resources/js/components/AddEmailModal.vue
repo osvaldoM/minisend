@@ -40,10 +40,10 @@
 
 <script>
 import axios from 'axios';
-import Modal from './base_components/Modal';
-import ValidationErrors from './base_components/ValidationErrors';
-import SaveButton from './base_components/SaveButton';
-import SvgIcon from "./base_components/SvgIcon";
+import Modal from './base_components/BaseModal';
+import ValidationErrors from './base_components/BaseValidationErrors';
+import SaveButton from './base_components/BaseSaveButton';
+import SvgIcon from "./base_components/BaseSvgIcon";
 export default {
   components: {
     SaveButton,

@@ -99,10 +99,10 @@
 </template>
 
 <script>
-import SvgIcon from './base_components/SvgIcon';
-import axios from '../HTTP';
-import { statusColor } from '../Util';
-import SaveButton from './base_components/SaveButton';
+import SvgIcon from '../base_components/BaseSvgIcon';
+import axios from '../../HTTP';
+import { statusColor } from '../../Util';
+import SaveButton from '../base_components/BaseSaveButton';
 
 export default {
   components: {

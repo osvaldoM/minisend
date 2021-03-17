@@ -19,12 +19,12 @@
 
 <script>
 
-import SvgIcon from './base_components/SvgIcon';
+import SvgIcon from '../base_components/BaseSvgIcon';
 
-import EmailsList from './EmailList';
-import SearchForm from './SearchForm';
-import { createStore } from '../store';
-import AddEmailModal from './AddEmailModal';
+import EmailsList from '../EmailList';
+import SearchForm from '../SearchForm';
+import { createStore } from '../../store';
+import AddEmailModal from '../AddEmailModal';
 
 const store = createStore();
 

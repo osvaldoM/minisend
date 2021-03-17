@@ -65,7 +65,7 @@
 
 <script>
 import { statusColor } from '../Util';
-import SvgIcon from './base_components/SvgIcon';
+import SvgIcon from './base_components/BaseSvgIcon';
 
 export default {
     components: {

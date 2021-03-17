@@ -27,10 +27,10 @@
 </template>
 
 <script>
-import EmailList from './EmailList';
-import { createStore } from '../store';
-import SvgIcon from './base_components/SvgIcon';
-import { statusColor } from '../Util';
+import EmailList from '../EmailList';
+import { createStore } from '../../store';
+import SvgIcon from '../base_components/BaseSvgIcon';
+import { statusColor } from '../../Util';
 
 const store = createStore();
 
