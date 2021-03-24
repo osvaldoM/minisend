@@ -1,6 +1,6 @@
 <template>
 
-    <modal :isModalVisible="isModalVisible" @close="$emit('close')">
+    <base-modal :isModalVisible="isModalVisible" v-on="$listeners">
         <section slot="body" class="">
             <h1>Send email</h1>
 
@@ -35,21 +35,22 @@
                 </div>
             </form>
         </section>
-    </modal>
+    </base-modal>
 </template>
 
 <script>
 import axios from 'axios';
-import Modal from './base_components/BaseModal';
+import BaseModal from './base_components/BaseModal';
 import ValidationErrors from './base_components/BaseValidationErrors';
 import SaveButton from './base_components/BaseSaveButton';
-import SvgIcon from "./base_components/BaseSvgIcon";
+import SvgIcon from './base_components/BaseSvgIcon';
+
 export default {
   components: {
     SaveButton,
-    Modal,
+    BaseModal,
     ValidationErrors,
-      SvgIcon
+    SvgIcon,
   },
   props: {
     isModalVisible: {
