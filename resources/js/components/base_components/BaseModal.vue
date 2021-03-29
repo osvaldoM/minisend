@@ -51,15 +51,12 @@
     padding: 20px 30px;
     background-color: #fff;
     transition: all 0.3s ease;
-    font-family: Helvetica, Arial, sans-serif;
 }
 .modal-header h3 {
     margin-top: 0;
     color: #42b983;
 }
-.modal-body {
-    margin: 20px 0;
-}
+
 .modal-default-button {
     float: right;
 }

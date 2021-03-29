@@ -21,7 +21,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['prefix' => 'v1'], function () {
-    Route::resource('email', EmailController::class);
+    Route::resource('email', EmailController::class)->only([
+        'index', 'store', 'show'
+    ]);
     Route::get('emails/to/{recipient}', [EmailController::class, 'get_recipient_emails'])->name('emailsToRecipient');
     Route::post('emails/{email}/resend', [EmailController::class, 'resend'])->name('email.resend');
 });
